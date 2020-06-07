@@ -1,5 +1,11 @@
 #test.py
 from browser import document, svg
+import math
 
-circle = svg.circle(cx=170, cy=120, r=40,
-                    stroke="black",stroke_width="2",fill="red")
+circle = svg.circle(cx=270, cy=120, r=100, stroke="black",stroke_width="2", fill="green")
+
+class Test:
+    x=100
+
+print("test:"+str(Test.x))
+print("alma")

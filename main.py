@@ -1,5 +1,5 @@
-from browser import document, svg
 import test
+from browser import document, svg
 
 title = svg.text('Tintiboy TM', x=70, y=25, font_size=22,
                  text_anchor="middle")
@@ -9,3 +9,5 @@ panel = document['panel']
 panel <= title
 panel <= circle
 panel <= test.circle
+
+print(test.Test.x)
