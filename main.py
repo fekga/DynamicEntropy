@@ -12,7 +12,7 @@ def main_update():
         r.update()
         # print(r)
 
-    # draw_nodes()
+    draw_nodes()
 
     print("update")
 
@@ -21,4 +21,4 @@ def main_update():
     # timer.sleep(.1)
     # time(.1)
 
-timer.set_interval(main_update(), 1000)
+timer.set_interval(main_update, 1000)

@@ -1,5 +1,5 @@
 # gui.py
-
+from browser import document, svg, timer
 from core import Resource,Converter
 import loader
 # import svg, panel, document from main
@@ -13,22 +13,24 @@ class Node:
         self.position = pos
 
     def draw(self, panel):
+        print(dir(self))
         x,y = self.position
-        circle = svg.circle(cx=x, cy=y, r=self.radius,stroke="black",stroke_width="2",fill=self.color)
-        title = svg.text(converter.name, x=x, y=y, font_size=8,text_anchor="middle")
+        circle = svg.circle(cx=x, cy=y+self.radius+10, r=self.radius,stroke="black",stroke_width="2",fill=self.color)
+        title = svg.text(self.converter.name, x=x, y=y, font_size=15,text_anchor="middle")
         panel <= circle
         panel <= title
 
 nodes = []
-x,y=0,0
+X,Y=200,200
 for conv in Converter.converters.values():
-    node = Node(conv,(x,y))
+    node = Node(conv,(X,Y))
     nodes.append(node)
-    x += 50
+    X += 50
 
 print(nodes)
 
 def draw_nodes():
     panel = document['panel']
-    # for node in nodes:
-        # node.draw(panel)
+    print(nodes)
+    for node in nodes:
+        node.draw(panel)
