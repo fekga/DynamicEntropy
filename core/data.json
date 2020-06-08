@@ -1,0 +1,16 @@
+{
+    "resources":[
+        {"name":"Fire"}
+    ],
+    "converters": [
+        {
+            "name" :"Machine",
+            "input": [
+                {"resource":"Fire","amount": "1","min_amount": "5"}
+            ],
+            "output":[
+                {"resource":"Fire","amount": "2"}
+            ]
+        }
+    ]
+}
