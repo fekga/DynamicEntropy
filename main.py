@@ -1,9 +1,24 @@
-from browser import document, svg
+from browser import document, svg, timer
 
-title = svg.text('Tintiboy TM', x=70, y=25, font_size=22,
-                 text_anchor="middle")
-circle = svg.circle(cx=70, cy=120, r=40,
-                    stroke="black",stroke_width="2",fill="red")
-panel = document['panel']
-panel <= title
-panel <= circle
+from core import *
+from gui import draw_nodes
+
+
+def main_update():
+    for c in Converter.converters.values():
+        c.update()
+
+    for r in Resource.resources.values():
+        r.update()
+        # print(r)
+
+    # draw_nodes()
+
+    print("update")
+
+    # print()
+    # time.sleep(.1)
+    # timer.sleep(.1)
+    # time(.1)
+
+timer.set_interval(main_update(), 1000)
