@@ -34,28 +34,28 @@ class Resource:
 class Converter:
     converters = dict()
 
-    def __init__(self,name,in_resources,out_resources):
+    def __init__(self, name, in_recipes, out_recipes):
         self.name = name
-        self.in_resources = in_resources
-        self.out_resources = out_resources
+        self.in_recipes = in_recipes
+        self.out_recipes = out_recipes
         self.running = True
         Converter.converters[name] = self
 
     def update(self):
         if not self.running:
             return
-        for rec in self.out_resources:
+        for rec in self.out_recipes:
             res,prod = rec.resource,rec.amount
             if res.amount + prod > res.max_amount:
                 return
-        for rec in self.in_resources:
+        for rec in self.in_recipes:
             res,need,min_amount = rec.resource,rec.amount,rec.min_amount
             if not res.can_take(need) and res.amount < min_amount:
                 return
-        for rec in self.in_resources:
+        for rec in self.in_recipes:
             res,need = rec.resource,rec.amount
             res.take(need)
-        for rec in self.out_resources:
+        for rec in self.out_recipes:
             res,prod = rec.resource,rec.amount
             res.give(prod)
 

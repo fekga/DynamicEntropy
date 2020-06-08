@@ -1,7 +1,7 @@
 from browser import document, svg, timer
 
 from core import *
-from gui import draw_nodes
+from gui import drawing
 
 
 def main_update():
@@ -9,6 +9,6 @@ def main_update():
         c.update()
     for r in Resource.resources.values():
         r.update()
-    draw_nodes()
+    drawing()
 
 timer.set_interval(main_update, 1000)
