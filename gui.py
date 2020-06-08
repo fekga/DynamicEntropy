@@ -13,7 +13,6 @@ class Node:
         self.position = pos
 
     def draw(self, panel):
-        print(dir(self))
         x,y = self.position
         circle = svg.circle(cx=x, cy=y+self.radius+10, r=self.radius,stroke="black",stroke_width="2",fill=self.color)
         title = svg.text(self.converter.name, x=x, y=y, font_size=15,text_anchor="middle")
@@ -27,10 +26,7 @@ for conv in Converter.converters.values():
     nodes.append(node)
     X += 50
 
-print(nodes)
-
 def draw_nodes():
     panel = document['panel']
-    print(nodes)
     for node in nodes:
         node.draw(panel)
