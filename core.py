@@ -29,37 +29,43 @@ class Resource:
     def __str__(self):
         return f"{self.name}: {self.amount:.2f}"
 
-from enum import Enum, auto
-class ConverterState(Enum):
-    OK = auto()
-    NO_INPUT = auto()
-    MAX_OUTPUT = auto()
-    STOPPED = auto()
 class Converter:
     converters = dict()
+    # States
+    OK = 1 << 0
+    NO_INPUT = 1 << 1
+    MAX_OUTPUT = 1 << 2
+    STOPPED = 1 << 3
 
     def __init__(self, name, in_recipes, out_recipes):
         self.name = name
         self.in_recipes = in_recipes
         self.out_recipes = out_recipes
         Converter.converters[name] = self
-        self.state = ConverterState.STOPPED
+        self.state = Converter.STOPPED
+
+    def still_locked(self):
+        for rec in self.in_recipes:
+            res, need, min_amount = rec.resource, rec.amount, rec.min_amount
+            if res.amount > 0 :
+                return False
+            else:
+                return True
 
     def update(self):
-        self.could_convert = False
-        if self.state == ConverterState.STOPPED:
+        if self.state == Converter.STOPPED:
             return
         for rec in self.out_recipes:
             res,prod = rec.resource,rec.amount
             if res.amount >= res.max_amount:
-                self.state = ConverterState.MAX_OUTPUT
+                self.state = Converter.MAX_OUTPUT
                 return
         for rec in self.in_recipes:
             res,need,min_amount = rec.resource,rec.amount,rec.min_amount
             if not res.can_take(need) or res.amount < min_amount:
-                self.state = ConverterState.NO_INPUT
+                self.state = Converter.NO_INPUT
                 return
-        self.state = ConverterState.OK
+        self.state = Converter.OK
         for rec in self.in_recipes:
             res,need = rec.resource,rec.amount
             res.take(need)
