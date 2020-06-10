@@ -1,23 +1,62 @@
 {
     "resources":[
-        {"name":"Fire"}
+        {"name":"Fire"},
+        {"name":"Wood"},
+        {"name":"Plant"},
+        {"name":"Water"}
     ],
     "converters": [
         {
-            "name" :"Machine",
+            "name" :"Fireplace",
             "input": [
-                {"resource":"Fire","amount": "1","min_amount": "5"}
+                {"resource":"Wood","amount": "2","min_amount": "5"},
+                {"resource":"Fire","amount": "1","min_amount": "1"}
             ],
             "output":[
-                {"resource":"Fire","amount": "2"}
+                {"resource":"Fire","amount": "3"}
             ]
         },
         {
-            "name" :"Johnny",
+            "name" :"Hydroponic system",
+            "input": [
+                {"resource":"Water","amount": "1","min_amount": "5"},
+                {"resource":"Plant","amount": "1","min_amount": "1"}
+            ],
+            "output":[
+                {"resource":"Plant","amount": "3"}
+            ]
+        },
+        {
+            "name" :"Woodcutter",
+            "input": [
+                {"resource":"Plant","amount": "1","min_amount": "1"}
+            ],
+            "output":[
+                {"resource":"Wood","amount": "1"}
+            ]
+        },
+        {
+            "name" :"Well",
             "input": [
             ],
             "output":[
-                {"resource":"Fire","amount": "1"}
+                {"resource":"Water","amount": ".5"}
+            ]
+        },
+        {
+            "name" :"Match",
+            "input": [
+            ],
+            "output":[
+                {"resource":"Fire","amount": ".1"}
+            ]
+        },
+        {
+            "name" :"Seed",
+            "input": [
+            ],
+            "output":[
+                {"resource":"Plant","amount": ".2"}
             ]
         }
     ]

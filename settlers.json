@@ -1,0 +1,130 @@
+{
+    "resources":[
+        {"name":"Seed","max_amount":"100"},
+        {"name":"Fruit","max_amount":"100"},
+        {"name":"Plant","max_amount":"100"},
+        {"name":"Water","max_amount":"100"},
+        {"name":"Wood","max_amount":"100"},
+        {"name":"Stamina","max_amount":"100"},
+        {"name":"Fire","max_amount":"100"},
+        {"name":"Brick","max_amount":"100"},
+        {"name":"Clay","max_amount":"100"},
+        {"name":"House","max_amount":"1"}
+    ],
+    "converters": [
+        {
+            "name" :"Well",
+            "input": [
+            ],
+            "output":[
+                {"resource":"Water","amount": ".5"}
+            ]
+        },
+        {
+            "name" :"Forest",
+            "input": [
+                {"resource":"Water","amount": ".5"},
+                {"resource":"Plant","amount": ".5","min_amount": "5"}
+            ],
+            "output":[
+                {"resource":"Plant","amount": ".5"},
+                {"resource":"Wood","amount": ".5"}
+            ]
+        },
+        {
+            "name" :"Gather fruit",
+            "input": [
+                {"resource":"Stamina","amount": ".5"}
+            ],
+            "output":[
+                {"resource":"Fruit","amount": ".5"}
+            ]
+        },
+        {
+            "name" :"Eat fruit",
+            "input": [
+                {"resource":"Fruit","amount": ".5"}
+            ],
+            "output":[
+                {"resource":"Seed","amount": ".5"}
+            ]
+        },
+        {
+            "name" :"Garden",
+            "input": [
+                {"resource":"Water","amount": ".5"},
+                {"resource":"Seed","amount": ".5"}
+            ],
+            "output":[
+                {"resource":"Plant","amount": ".5"}
+            ]
+        },
+        {
+            "name" :"Start a fire",
+            "input": [
+                {"resource":"Wood","amount": ".5", "min_amount":"5"},
+                {"resource":"Stamina","amount": ".5", "min_amount":"50"}
+            ],
+            "output":[
+                {"resource":"Fire","amount": ".5"}
+            ]
+        },
+        {
+            "name" :"Fireplace",
+            "input": [
+                {"resource":"Wood","amount": ".5", "min_amount":"1"},
+                {"resource":"Fire","amount": ".5", "min_amount":"5"}
+            ],
+            "output":[
+                {"resource":"Fire","amount": "3"}
+            ]
+        },
+        {
+            "name" :"Dig clay",
+            "input": [
+                {"resource":"Stamina","amount": ".5", "min_amount":"20"},
+                {"resource":"Water","amount": ".5", "min_amount":"5"}
+            ],
+            "output":[
+                {"resource":"Clay","amount": "3"}
+            ]
+        },
+        {
+            "name" :"Furnace",
+            "input": [
+                {"resource":"Clay","amount": ".5", "min_amount":"20"},
+                {"resource":"Fire","amount": ".5", "min_amount":"5"}
+            ],
+            "output":[
+                {"resource":"Brick","amount": "3"}
+            ]
+        },
+        {
+            "name" :"Build house",
+            "input": [
+                {"resource":"Brick","amount": ".5", "min_amount":"20"},
+                {"resource":"Stamina","amount": ".5", "min_amount":"5"}
+            ],
+            "output":[
+                {"resource":"House","amount": ".1"}
+            ]
+        },
+        {
+            "name" :"Rest",
+            "input": [
+                {"resource":"House","amount": ".0", "min_amount":"1"}
+            ],
+            "output":[
+                {"resource":"Stamina","amount": ".1"}
+            ]
+        },
+        {
+            "name" :"Sleep on the ground",
+            "input": [
+            ],
+            "output":[
+                {"resource":"Stamina","amount": ".5"}
+            ]
+        }
+    ]
+}

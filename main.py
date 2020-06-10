@@ -1,7 +1,7 @@
 from browser import document, svg, timer
 
 from core import *
-from gui import drawing
+from gui import *
 
 
 def main_update():
@@ -9,6 +9,9 @@ def main_update():
         c.update()
     for r in Resource.resources.values():
         r.update()
+        print(r)
+    print()
+
     drawing()
 
-timer.set_interval(main_update, 1000)
+# timer.set_interval(main_update, 0)

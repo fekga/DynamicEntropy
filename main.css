@@ -1,0 +1,17 @@
+/*main.css*/
+
+path {
+  fill: none;
+  stroke: black;
+  stroke-width: 2;
+  stroke-dashoffset: 1000;
+  stroke-dasharray: 10;
+  animation: dash 1s linear infinite;
+}
+
+@keyFrames dash
+{
+  to {
+    stroke-dashoffset: 0;
+  }
+}

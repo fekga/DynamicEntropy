@@ -4,13 +4,16 @@ from core import Resource, Recipe, Converter
 import json
 
 converters = []
-with open('data.json','r') as f:
+with open('settlers.json','r') as f:
     d = json.load(f)
 
     for resource in d['resources']:
         name = resource['name']
+
+        amount = float(resource.get('amount',0))
         max_amount = float(resource.get('max_amount',float('inf')))
-        Resource(name,max_amount)
+
+        Resource(name,amount=amount,max_amount=max_amount)
 
     for converter in d['converters']:
         name = converter['name']
@@ -30,3 +33,16 @@ with open('data.json','r') as f:
             min_amount = float(recipe.get('min_amount',0))
             output_recipes.append(Recipe(Resource.resources[resource],amount,min_amount))
         Converter(name,input_recipes,output_recipes)
+
+
+for resource in Resource.resources.values():
+    print(f'{resource.name.lower().replace(" ","_")} = Resource(name="{resource.name}",amount={resource.amount},max_amount={resource.max_amount})')
+
+for converter in Converter.converters.values():
+    print(f'Converter(name="{converter.name}"\n\t,in_recipes=[')
+    for recipe in converter.in_recipes:
+        print(f'\t\tRecipe(resource={recipe.resource.name.lower().replace(" ","_")},amount={recipe.amount},min_amount={recipe.min_amount}),')
+    print('\t]\n\t,out_recipes=[')
+    for recipe in converter.out_recipes:
+        print(f'\t\tRecipe(resource={recipe.resource.name.lower().replace(" ","_")},amount={recipe.amount},min_amount={recipe.min_amount}),')
+    print('\t])')
