@@ -1,17 +1,26 @@
 from browser import document, svg, timer
 
 from core import *
+import data
 from gui import *
 
 
-def main_update():
+def tick():
     for c in Converter.converters.values():
         c.update()
     for r in Resource.resources.values():
         r.update()
-        print(r)
-    print()
+        # print(r)
+    # print()
 
-    drawing()
+timer.set_interval(tick, 100)
+timer.set_interval(drawing, 100)
 
-# timer.set_interval(main_update, 0)
+
+# for dev
+def hard_reset(event):
+    for r in Resource.resources.values():
+        r.amount = 0
+    for c in Converter.converters.values():
+        c.running = False
+document["reset"].bind("click", hard_reset)

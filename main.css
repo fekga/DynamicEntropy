@@ -6,7 +6,7 @@ path {
   stroke-width: 2;
   stroke-dashoffset: 1000;
   stroke-dasharray: 10;
-  animation: dash 1s linear infinite;
+  animation: dash 50s linear infinite;
 }
 
 @keyFrames dash
@@ -14,4 +14,9 @@ path {
   to {
     stroke-dashoffset: 0;
   }
+}
+
+text {
+    pointer-events:none;
+    user-select: none;
 }
