@@ -1,9 +1,9 @@
 # gui.py
 from browser import document, svg, timer
-from core import Resource,Converter
+from test.core import Resource,Converter
 # import loader
 # import svg, panel, document from main
-import hud
+import test.hud as hud
 
 class Node(Converter):
     radius = 20
@@ -17,19 +17,34 @@ class Node(Converter):
         x,y = self.position
         self.circle.bind("click", self.clicked)
         self.circle.bind("contextmenu", self.right_clicked)
+        self.circle.bind("mouseover", self.mouse_over)
+        self.circle.bind("mouseout", self.mouse_out)
         self.connections = []
         self.locked = True
         self.circle.attrs["visibility"] = "hidden"
 
     def clicked(self, event):
-        print(self.name + " clicked")
-        hud.Hud.show_info(self)
+        hud.Hud.set_active(self)
+        print('node')
+        return False
 
     def right_clicked(self, event):
         if self.state == Converter.STOPPED:
             self.state = Converter.OK
         else:
             self.state = Converter.STOPPED
+
+    def mouse_over(self, event):
+        hud.Hud.show_info(self)
+        self.circle.attrs['stroke'] = 'orange'
+        for line,node in self.connections:
+            line.attrs['stroke'] = 'green'
+
+    def mouse_out(self, event):
+        hud.Hud.show_info(self)
+        self.circle.attrs['stroke'] = 'black'
+        for line,node in self.connections:
+            line.attrs['stroke'] = 'black'
 
     def still_locked(self):
         for rec in self.in_recipes:
@@ -108,12 +123,19 @@ for node in nodes:
 
 # Init resource texts
 resources=[]
-X,Y = 800,100
+Y = 20
 for res in Resource.resources.values():
-    text = svg.text(str(res), x=X, y=Y, font_size=20,text_anchor="middle")
+    text = svg.text(str(res), x=hud.Hud.width-10, y=Y, font_size=20,text_anchor="end")
     panel <= text
     resources.append((res,text))
-    Y += 50
+    Y += 25
+
+# def panel_click(event):
+#     hud.Hud.set_active(None)
+#     print('panel')
+#     return True
+
+# panel.bind('click',panel_click)
 
 def draw_connections():
     for node_out in nodes:

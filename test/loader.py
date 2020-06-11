@@ -1,6 +1,6 @@
 # loader.py
 
-from core import Resource, Recipe, Converter
+from test.core import Resource, Recipe, Converter
 import json
 
 converters = []

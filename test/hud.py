@@ -15,18 +15,29 @@ class Hud:
 
     panel <= node_name
 
-    last_node = None
+    hover_node = None
+    active_node = None
     tspans = []
 
+    def set_active(node):
+        Hud.active_node = node if node != Hud.active_node else None
+        Hud.show_info(node)
+
     def show_info(node):
-        if node == Hud.last_node:
-            Hud.last_node = None
+        if node is None:
+            return
+        if Hud.active_node is not None:
+            node = Hud.active_node
+        elif node == Hud.hover_node:
+            Hud.hover_node = None
             Hud.node_name.text = ''
             for e in Hud.tspans:
                 del e
             return
+        else:
+            Hud.hover_node = node
         Hud.tspans = []
-        Hud.last_node = node
+        
         Hud.node_name.text = node.name
 
         if node.in_recipes:
