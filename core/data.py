@@ -1,8 +1,6 @@
-from .core import *
-
+from core.core import *
 
 # Resources
-
 seed = Resource(name="Seed",amount=0.0,max_amount=10.0)
 fruit = Resource(name="Fruit",amount=0.0,max_amount=10.0)
 plant = Resource(name="Plant",amount=0.0,max_amount=10.0)
@@ -15,7 +13,6 @@ clay = Resource(name="Clay",amount=0.0,max_amount=10.0)
 house = Resource(name="House",amount=0.0,max_amount=1.0)
 
 # Converters
-
 Converter(name="Well"
     ,in_recipes=[
     ]

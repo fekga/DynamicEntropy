@@ -1,9 +1,8 @@
 from browser import document, svg, timer
 
-import test
-from test.core import *
-from test.data import *
-from test.gui import *
+from core.core import *
+from core.data import *
+from gui.gui import *
 
 
 def tick():

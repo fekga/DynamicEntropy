@@ -1,5 +1,4 @@
 # hud.py
-
 from browser import document, svg
 
 def create_tspan(text,x,dy='1em'):

@@ -1,9 +1,7 @@
 # gui.py
 from browser import document, svg, timer
-from test.core import Resource,Converter
-# import loader
-# import svg, panel, document from main
-import test.hud as hud
+from core.core import Resource,Converter
+import gui.hud as hud
 
 class Node(Converter):
     radius = 20

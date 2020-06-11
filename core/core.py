@@ -1,5 +1,4 @@
 # core.py
-
 from dataclasses import dataclass
 
 class Resource:
