@@ -3,6 +3,7 @@ from browser import document, svg, timer
 from core import Resource,Converter
 # import loader
 # import svg, panel, document from main
+import hud
 
 class Node(Converter):
     radius = 20
@@ -22,6 +23,7 @@ class Node(Converter):
 
     def clicked(self, event):
         print(self.name + " clicked")
+        hud.Hud.show_info(self)
 
     def right_clicked(self, event):
         if self.state == Converter.STOPPED:
