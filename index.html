@@ -8,9 +8,6 @@
         <script type="text/javascript"
         src="brython/3_8_8/brython.min.js">
         </script>
-        <!-- <script type="text/javascript"
-        src="brython/3_8_8/brython_stdlib.js">
-        </script> -->
         <script type="text/javascript"
         src="brython/3_8_8/brython_modules.js">
         </script>
@@ -18,13 +15,17 @@
         
     </head>
     <body oncontextmenu="return false;" onload="brython({indexedDB:false})">
-        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-            style="..." id="play_area">
-        <g id="panel"></g>
-    </svg>
-    <script type="text/python" src="main.py"></script>
-    <!--    <script type="text/python" src="test.py"></script>-->
-    <button id="reset">Reset</button>
-    <input type="checkbox" id="dev_tick">
+        <div id="content">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                style="..." id="play_area">
+            <g id="panel"></g>
+            </svg>
+            <script type="text/python" src="main.py"></script>
+            <button id="reset">Reset</button>
+            <input type="checkbox" id="dev_tick">
+        </div>
+        <div id="loading">
+            Loading...<progress></progress>
+        </div>
 </body>
 </html>

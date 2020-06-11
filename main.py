@@ -1,4 +1,8 @@
 from browser import document, svg, timer
+# Visible content
+document["loading"].attrs["style"] = "display:none"
+document["content"].attrs["style"] = "display:block"
+
 
 from core.core import *
 from core.data import *

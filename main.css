@@ -1,6 +1,6 @@
 /*main.css*/
 
-html, body, svg#play_area {
+html, body, #content, svg#play_area {
     display:block;
     width: 100%;
     min-height: 100%;
@@ -14,6 +14,14 @@ html, body, svg#play_area {
 }
 button {
     display: block;
+}
+
+/* Loading page trick */
+#content {
+    display:none;
+}
+#loading {
+    display:block;
 }
 
 path {
