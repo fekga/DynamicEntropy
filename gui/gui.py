@@ -7,7 +7,7 @@ class Node(Converter):
     radius = 20
 
     def __init__(self, converter, pos):
-        super().__init__(name=converter.name, in_recipes=converter.in_recipes, out_recipes=converter.out_recipes)
+        super().__init__(name=converter.name, in_recipes=converter.in_recipes, out_recipes=converter.out_recipes, upgrades=converter.upgrades)
         self.position = pos
         self.circle = svg.circle(cx=0, cy=0, r=self.radius,stroke="black",stroke_width="2",fill="green")
         self.circle.attrs["id"] = self.name
@@ -123,7 +123,7 @@ for node in nodes:
 resources=[]
 Y = 20
 for res in Resource.resources.values():
-    text = svg.text(str(res), x=hud.Hud.width-10, y=Y, font_size=20,text_anchor="end")
+    text = svg.text(str(res), x=hud.Hud.width-10, y=Y, font_size=20, text_anchor="end")
     panel <= text
     resources.append((res,text))
     Y += 25

@@ -1,5 +1,4 @@
 # core.py
-from dataclasses import dataclass
 
 class Resource:
     resources = dict()
@@ -36,10 +35,13 @@ class Converter:
     MAX_OUTPUT = 1 << 2
     STOPPED = 1 << 3
 
-    def __init__(self, name, in_recipes, out_recipes):
+    def __init__(self, name, in_recipes, out_recipes, upgrades=None):
         self.name = name
         self.in_recipes = in_recipes
         self.out_recipes = out_recipes
+        if upgrades is None:
+            upgrades = []
+        self.upgrades = upgrades
         Converter.converters[name] = self
         self.state = Converter.STOPPED
 
@@ -52,6 +54,7 @@ class Converter:
                 return True
 
     def update(self):
+        self.try_upgrade(0)
         if self.state == Converter.STOPPED:
             return
         for rec in self.out_recipes:
@@ -72,10 +75,36 @@ class Converter:
             res,prod = rec.resource,rec.amount
             res.give(prod)
 
+    def changeRecipies(self, basic_recipies, change_recipies):
+        for change in change_recipies:
+            resource, change_amount, change_min_amount= change.resource, change.amount, change.min_amount
+            for rec in basic_recipies:
+                if rec.resource == resource:
+                    rec.amount += change_amount
+                    rec.min_amount += change_min_amount
+                    break
+            else:
+                print("Implement me: upgrade, recipe error:", resource)
+    def do_upgrade(self,upgrade):
+        self.changeRecipies(self.in_recipes, upgrade.in_change)
+        self.changeRecipies(self.out_recipes, upgrade.out_change)
+        upgrade.upgraded = True
+        print("upgraded")
 
-@dataclass
-class Recipe:
-    resource: Resource
-    amount: float = 0
-    min_amount: float = 0
+    def try_upgrade(self, upgradeIdx):
+        if 0 <= upgradeIdx < len(self.upgrades):
+            upgrade = self.upgrades[upgradeIdx]
+            if upgrade.upgraded:
+                return False
+            for cost in upgrade.cost:
+                resource, price = cost.resource,cost.amount
+                if not resource.can_take(price):
+                    return False
+            for cost in upgrade.cost:
+                resource, price = cost.resource,cost.amount
+                resource.take(price)
+            self.do_upgrade(upgrade)
+
+
+
 

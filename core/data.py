@@ -1,4 +1,20 @@
-from core.core import *
+from core.core import Resource, Converter
+from dataclasses import dataclass, field
+from typing import List
+
+@dataclass
+class Recipe:
+    resource: Resource
+    amount: float = 0
+    min_amount: float = 0
+
+@dataclass
+class Upgrade:
+    cost: List[Resource]
+    in_change: List[Recipe] = field(default_factory=list)
+    out_change: List[Recipe] = field(default_factory=list)
+    upgraded : bool=False
+
 
 # Resources
 seed = Resource(name="Seed",amount=0.0,max_amount=10.0)
@@ -18,6 +34,19 @@ Converter(name="Well"
     ]
     ,out_recipes=[
         Recipe(resource=water,amount=0.1,min_amount=0.0),
+    ]
+    ,upgrades=[
+        Upgrade(
+            cost=[
+                Recipe(resource=water,amount=0.1),
+            ],
+            in_change=[
+            ],
+            out_change=[
+                Recipe(resource=water,amount=+0.2),
+                Recipe(resource=plant,amount=+0.2),
+            ],
+        ),
     ])
 Converter(name="Forest"
     ,in_recipes=[
