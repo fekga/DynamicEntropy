@@ -1,18 +1,20 @@
 /*main.css*/
 
-html, body {
+html, body, svg#play_area {
+    display:block;
+    width: 100%;
     min-height: 100%;
-    margin:0;
-    padding:0;
-    overflow:hidden;
+    height: 500px;
 }
-svg#play_area {
+
+#panel {
+    display:block;
     width: 100%;
     min-height: 100%;
 }
-
-html, body {  }
-svg { position:fixed; top:0; left:0; height:100%; width:100% }
+button {
+    display: block;
+}
 
 path {
   fill: none;
