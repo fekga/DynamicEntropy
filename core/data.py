@@ -1,20 +1,4 @@
-from core.core import Resource, Converter
-from dataclasses import dataclass, field
-from typing import List
-
-@dataclass
-class Recipe:
-    resource: Resource
-    amount: float = 0
-    min_amount: float = 0
-
-@dataclass
-class Upgrade:
-    cost: List[Resource]
-    in_change: List[Recipe] = field(default_factory=list)
-    out_change: List[Recipe] = field(default_factory=list)
-    upgraded : bool=False
-
+from core.core import Resource, Converter, Upgrade
 
 # Resources
 seed = Resource(name="Seed",amount=0.0,max_amount=10.0)
@@ -30,112 +14,99 @@ house = Resource(name="House",amount=0.0,max_amount=1.0)
 
 # Converters
 Converter(name="Well"
-    ,in_recipes=[
+    ,needs=[
     ]
-    ,out_recipes=[
-        Recipe(resource=water,amount=0.1,min_amount=0.0),
-    ]
-    ,upgrades=[
-        Upgrade(
-            cost=[
-                Recipe(resource=water,amount=0.1),
-            ],
-            in_change=[
-            ],
-            out_change=[
-                Recipe(resource=water,amount=+0.2),
-                Recipe(resource=plant,amount=+0.2),
-            ],
-        ),
+    ,makes=[
+        water(amount=0.1,at_least=0.0),
     ])
 Converter(name="Forest"
-    ,in_recipes=[
-        Recipe(resource=water,amount=2,min_amount=0.0),
-        Recipe(resource=plant,amount=2,min_amount=5.0),
+    ,needs=[
+        water(amount=2,at_least=0.0),
+        plant(amount=2,at_least=5.0),
     ]
-    ,out_recipes=[
-        Recipe(resource=plant,amount=3,min_amount=0.0),
+    ,makes=[
+        plant(amount=3,at_least=0.0),
     ])
 Converter(name="Wood cutting"
-    ,in_recipes=[
-        Recipe(resource=plant,amount=1,min_amount=0.0),
-        Recipe(resource=stamina,amount=1,min_amount=0.0),
+    ,needs=[
+        plant(amount=1,at_least=0.0),
+        stamina(amount=1,at_least=0.0),
     ]
-    ,out_recipes=[
-        Recipe(resource=wood,amount=1,min_amount=0.0),
+    ,makes=[
+        wood(amount=1,at_least=0.0),
     ])
 Converter(name="Gather fruit"
-    ,in_recipes=[
-        Recipe(resource=stamina,amount=1,min_amount=0.0),
+    ,needs=[
+        stamina(amount=1,at_least=0.0),
     ]
-    ,out_recipes=[
-        Recipe(resource=fruit,amount=1,min_amount=0.0),
+    ,makes=[
+        fruit(amount=1,at_least=0.0),
     ])
 Converter(name="Eat fruit"
-    ,in_recipes=[
-        Recipe(resource=fruit,amount=0.1,min_amount=0.0),
+    ,needs=[
+        fruit(amount=0.1,at_least=0.0),
     ]
-    ,out_recipes=[
-        Recipe(resource=seed,amount=0.1,min_amount=0.0),
+    ,makes=[
+        seed(amount=0.1,at_least=0.0),
     ])
 Converter(name="Garden"
-    ,in_recipes=[
-        Recipe(resource=seed,amount=0.5,min_amount=0.0),
-        Recipe(resource=water,amount=0.5,min_amount=0.0),
+    ,needs=[
+        seed(amount=0.5,at_least=0.0),
+        water(amount=0.5,at_least=0.0),
     ]
-    ,out_recipes=[
-        Recipe(resource=plant,amount=0.5,min_amount=0.0),
+    ,makes=[
+        plant(amount=0.5,at_least=0.0),
     ])
 Converter(name="Start a fire"
-    ,in_recipes=[
-        Recipe(resource=wood,amount=0.5,min_amount=5.0),
-        Recipe(resource=stamina,amount=0.5,min_amount=5.0),
+    ,needs=[
+        wood(amount=0.5,at_least=5.0),
+        stamina(amount=0.5,at_least=5.0),
     ]
-    ,out_recipes=[
-        Recipe(resource=fire,amount=0.5,min_amount=0.0),
+    ,makes=[
+        fire(amount=0.5,at_least=0.0),
     ])
 Converter(name="Fireplace"
-    ,in_recipes=[
-        Recipe(resource=wood,amount=0.5,min_amount=1.0),
-        Recipe(resource=fire,amount=0.5,min_amount=5.0),
+    ,needs=[
+        wood(amount=0.5,at_least=1.0),
+        fire(amount=0.5,at_least=5.0),
     ]
-    ,out_recipes=[
-        Recipe(resource=fire,amount=3.0,min_amount=0.0),
+    ,makes=[
+        fire(amount=3.0,at_least=0.0),
     ])
 Converter(name="Dig clay"
-    ,in_recipes=[
-        Recipe(resource=stamina,amount=0.5,min_amount=0.0),
-        Recipe(resource=water,amount=0.5,min_amount=5.0),
+    ,needs=[
+        stamina(amount=0.5,at_least=0.0),
+        water(amount=0.5,at_least=5.0),
     ]
-    ,out_recipes=[
-        Recipe(resource=clay,amount=3.0,min_amount=0.0),
+    ,makes=[
+        clay(amount=3.0,at_least=0.0),
     ])
 Converter(name="Furnace"
-    ,in_recipes=[
-        Recipe(resource=clay,amount=0.2,min_amount=0.0),
-        Recipe(resource=fire,amount=0.1,min_amount=5.0),
+    ,needs=[
+        clay(amount=0.2,at_least=0.0),
+        fire(amount=0.1,at_least=5.0),
     ]
-    ,out_recipes=[
-        Recipe(resource=brick,amount=0.1,min_amount=0.0),
+    ,makes=[
+        brick(amount=0.1,at_least=0.0),
     ])
 Converter(name="Build house"
-    ,in_recipes=[
-        Recipe(resource=brick,amount=0.5,min_amount=5.0),
-        Recipe(resource=stamina,amount=0.5,min_amount=5.0),
+    ,needs=[
+        brick(amount=0.5,at_least=5.0),
+        stamina(amount=0.5,at_least=5.0),
     ]
-    ,out_recipes=[
-        Recipe(resource=house,amount=0.1,min_amount=0.0),
+    ,makes=[
+        house(amount=0.1,at_least=0.0),
     ])
 Converter(name="Rest"
-    ,in_recipes=[
-        Recipe(resource=house,amount=0.0,min_amount=1.0),
+    ,needs=[
+        house(amount=0.0,at_least=1.0),
     ]
-    ,out_recipes=[
-        Recipe(resource=stamina,amount=0.1,min_amount=0.0),
+    ,makes=[
+        stamina(amount=0.1,at_least=0.0),
     ])
 Converter(name="Sleep on the ground"
-    ,in_recipes=[
+    ,needs=[
     ]
-    ,out_recipes=[
-        Recipe(resource=stamina,amount=0.1,min_amount=0.0),
+    ,makes=[
+        stamina(amount=0.1,at_least=0.0),
     ])

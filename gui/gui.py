@@ -3,34 +3,33 @@ from browser import document, svg, timer
 from core.core import Resource,Converter
 import gui.hud as hud
 
-class Node(Converter):
+class Node:
     radius = 20
 
     def __init__(self, converter, pos):
-        super().__init__(name=converter.name, in_recipes=converter.in_recipes, out_recipes=converter.out_recipes, upgrades=converter.upgrades)
+        self.converter = converter
         self.position = pos
         self.circle = svg.circle(cx=0, cy=0, r=self.radius,stroke="black",stroke_width="2",fill="green")
-        self.circle.attrs["id"] = self.name
-        self.title = svg.text(self.name, x=0, y=-self.radius, z=10, font_size=15,text_anchor="middle")
+        self.circle.attrs["id"] = self.converter.name
+        self.title = svg.text(self.converter.name, x=0, y=-self.radius, z=10, font_size=15,text_anchor="middle")
         x,y = self.position
         self.circle.bind("click", self.clicked)
         self.circle.bind("contextmenu", self.right_clicked)
         self.circle.bind("mouseover", self.mouse_over)
         self.circle.bind("mouseout", self.mouse_out)
         self.connections = []
-        self.locked = True
+        self.hidden = True
         self.circle.attrs["visibility"] = "hidden"
 
     def clicked(self, event):
         hud.Hud.set_active(self)
-        print('node')
         return False
 
     def right_clicked(self, event):
-        if self.state == Converter.STOPPED:
-            self.state = Converter.OK
+        if self.converter.is_stopped():
+            self.converter.start()
         else:
-            self.state = Converter.STOPPED
+            self.converter.stop()
 
     def mouse_over(self, event):
         hud.Hud.show_info(self)
@@ -44,23 +43,15 @@ class Node(Converter):
         for line,node in self.connections:
             line.attrs['stroke'] = 'black'
 
-    def still_locked(self):
-        for rec in self.in_recipes:
-            res, need, min_amount = rec.resource, rec.amount, rec.min_amount
-            if res.amount > 0 :
-                return False
-            else:
-                return True
-
     def update(self):
-        if self.locked:
-            self.locked = self.still_locked()
-            if (self.locked):
+        if self.hidden:
+            self.hidden = self.converter.still_hidden()
+            if self.hidden:
                 return
-        super().update()
+        # self.converter.update()
 
     def draw(self):
-        if not self.locked:
+        if not self.hidden:
             self.circle.attrs["visibility"] = "visible"
             # Update
             cx, cy = self.position
@@ -69,13 +60,14 @@ class Node(Converter):
             self.title.attrs["x"] = cx
             self.title.attrs["y"] = cy
             self.position = cx, cy
-            if self.state == Converter.OK:
+            state = self.converter.state
+            if state == Converter.OK:
                 color = "green"
-            elif self.state == Converter.STOPPED:
+            elif state == Converter.STOPPED:
                 color = "gray"
-            elif self.state == Converter.NO_INPUT:
+            elif state == Converter.NO_INPUT:
                 color = "yellow"
-            elif self.state == Converter.MAX_OUTPUT:
+            elif state == Converter.MAX_OUTPUT:
                 color = "red"
             else:
                 color = "blue" # error
@@ -91,7 +83,7 @@ maxCol = 5
 actCol = 0
 X = sX
 Y = sY
-for conv in Converter.converters.values():
+for conv in Converter.converters:
     node = Node(conv,(X,Y))
     nodes.append(node)
     X += deltaX
@@ -105,9 +97,9 @@ for conv in Converter.converters.values():
 
 # Init connections
 for node_out in nodes:
-    for out_recipe in  node_out.out_recipes:
+    for out_recipe in node_out.converter.makes:
         for node_in in nodes:
-            for in_recipe in node_in.in_recipes:
+            for in_recipe in node_in.converter.needs:
                 if out_recipe.resource == in_recipe.resource:
                     d="M 100 350 c 100 -200 200 500 300 0"
                     line = svg.path(d=d)
@@ -122,8 +114,8 @@ for node in nodes:
 # Init resource texts
 resources=[]
 Y = 20
-for res in Resource.resources.values():
-    text = svg.text(str(res), x=hud.Hud.width-10, y=Y, font_size=20, text_anchor="end")
+for res in Resource.resources:
+    text = svg.text(repr(res), x=hud.Hud.width-10, y=Y, font_size=20, text_anchor="end")
     panel <= text
     resources.append((res,text))
     Y += 25
@@ -147,7 +139,7 @@ def draw_connections():
             d = f'M {x1} {y1} C {mx1} {my1} {mx2} {my2} {x2} {y2}'
 
             line.attrs["d"] = d
-            if node_out.state == Converter.OK and not node_in.locked:
+            if node_out.converter.state == Converter.OK and not node_in.hidden:
                 line.attrs["visibility"] = "visible"
             else:
                 line.attrs["visibility"] = "hidden"
@@ -155,6 +147,7 @@ def draw_connections():
 
 def draw_nodes():
     for node in nodes:
+        node.update()
         node.draw()
 
 def draw_resources():

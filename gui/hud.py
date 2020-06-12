@@ -37,16 +37,16 @@ class Hud:
             Hud.hover_node = node
         Hud.tspans = []
         
-        Hud.node_name.text = node.name
+        Hud.node_name.text = node.converter.name
 
         if node.in_recipes:
             Hud.node_name <= create_tspan('Needs:',x=10,dy=25)
-            for in_recipe in node.in_recipes:
-                text = f'{in_recipe.resource.name} [>{in_recipe.min_amount}]: {in_recipe.amount}'
-                Hud.node_name <= create_tspan(text,x=20)
+            for in_recipe in node.converter.needs:
+                text = f'{in_recipe.resource.name} [>={in_recipe.at_least}]: {in_recipe.amount:.2f}'
+                Hud.node_name <= create_tspan(test,x=20)
         if node.out_recipes:
             Hud.node_name <= create_tspan('Produces:',x=10,dy=25)
-            for out_recipe in node.out_recipes:
-                text = f'{out_recipe.resource.name}: {out_recipe.amount}'
+            for out_recipe in node.converter.makes:
+                text = f'{out_recipe.resource.name}: {out_recipe.amount:.2f}'
                 Hud.node_name <= create_tspan(text,x=20)
         Hud.node_name.attrs['y'] = Hud.height - 20 - (len(Hud.tspans)-2) * 20 - 50

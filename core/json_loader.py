@@ -35,7 +35,7 @@ with open('settlers.json','r') as f:
         Converter(name,input_recipes,output_recipes)
 
 
-for resource in Resource.resources.values():
+for resource in Resource.resources:
     print(f'{resource.name.lower().replace(" ","_")} = Resource(name="{resource.name}",amount={resource.amount},max_amount={resource.max_amount})')
 
 for converter in Converter.converters.values():
