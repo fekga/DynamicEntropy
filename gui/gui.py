@@ -1,77 +1,11 @@
 # gui.py
-from browser import document, svg, timer
-from core.core import Resource,Converter
+from browser import document, svg, html
+from core.resource import Resource
+from core.converter import Converter
+from gui.node import Node
 import gui.hud as hud
+from gui.info_panel import InfoPanelItem
 
-class Node:
-    radius = 20
-
-    def __init__(self, converter, pos):
-        self.converter = converter
-        self.position = pos
-        self.circle = svg.circle(cx=0, cy=0, r=self.radius,stroke="black",stroke_width="2",fill="green")
-        self.circle.attrs["id"] = self.converter.name
-        self.title = svg.text(self.converter.name, x=0, y=-self.radius, z=10, font_size=15,text_anchor="middle")
-        x,y = self.position
-        self.circle.bind("click", self.clicked)
-        self.circle.bind("contextmenu", self.right_clicked)
-        self.circle.bind("mouseover", self.mouse_over)
-        self.circle.bind("mouseout", self.mouse_out)
-        self.connections = []
-        self.hidden = True
-        self.circle.attrs["visibility"] = "hidden"
-
-    def clicked(self, event):
-        hud.Hud.set_active(self)
-        return False
-
-    def right_clicked(self, event):
-        if self.converter.is_stopped():
-            self.converter.start()
-        else:
-            self.converter.stop()
-
-    def mouse_over(self, event):
-        hud.Hud.show_info(self)
-        self.circle.attrs['stroke'] = 'orange'
-        for line,node in self.connections:
-            line.attrs['stroke'] = 'green'
-
-    def mouse_out(self, event):
-        hud.Hud.show_info(self)
-        self.circle.attrs['stroke'] = 'black'
-        for line,node in self.connections:
-            line.attrs['stroke'] = 'black'
-
-    def update(self):
-        if self.hidden:
-            self.hidden = self.converter.still_hidden()
-            if self.hidden:
-                return
-        # self.converter.update()
-
-    def draw(self):
-        if not self.hidden:
-            self.circle.attrs["visibility"] = "visible"
-            # Update
-            cx, cy = self.position
-            self.circle.attrs["cx"] = cx
-            self.circle.attrs["cy"] = cy
-            self.title.attrs["x"] = cx
-            self.title.attrs["y"] = cy
-            self.position = cx, cy
-            state = self.converter.state
-            if state == Converter.OK:
-                color = "green"
-            elif state == Converter.STOPPED:
-                color = "gray"
-            elif state == Converter.NO_INPUT:
-                color = "yellow"
-            elif state == Converter.MAX_OUTPUT:
-                color = "red"
-            else:
-                color = "blue" # error
-            self.circle.attrs["fill"] = color
 
 # Init nodes
 nodes = []
@@ -111,15 +45,6 @@ for node in nodes:
     panel <= node.circle
     panel <= node.title
 
-# Init resource texts
-resources=[]
-Y = 20
-for res in Resource.resources:
-    text = svg.text(repr(res), x=hud.Hud.width-10, y=Y, font_size=20, text_anchor="end")
-    panel <= text
-    resources.append((res,text))
-    Y += 25
-
 # def panel_click(event):
 #     hud.Hud.set_active(None)
 #     print('panel')
@@ -147,18 +72,23 @@ def draw_connections():
 
 def draw_nodes():
     for node in nodes:
-        node.update()
+        node.try_unhide_node()
         node.draw()
 
 def draw_resources():
-    for res,text in resources:
-        text.text = res
+    for info_panel_item in info_panel_items:
+        info_panel_item.draw()
 
 
 def drawing():
     draw_nodes()
     draw_connections()
     draw_resources()
+
+# Init resource texts
+info_panel_items=[]
+for idx, res in enumerate(Resource.resources):
+    info_panel_items.append(InfoPanelItem(res, idx))
 
 # Init GUI
 drawing()

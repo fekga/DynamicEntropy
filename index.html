@@ -14,8 +14,12 @@
     <body oncontextmenu="return false;" onload="brython({indexedDB:false})">
         <div id="content">
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                style="..." id="play_area">
-            <g id="panel"></g>
+                id="play_area">
+                <g id="panel"></g>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                 id="info_area">
+                <g id="info_panel"></g>
             </svg>
             <script type="text/python" src="main.py"></script>
             <button id="reset">Reset</button>

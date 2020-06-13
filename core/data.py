@@ -1,4 +1,6 @@
-from core.core import Resource, Converter, Upgrade
+from core.resource import Resource
+from core.converter import Converter
+from core.upgrade import Upgrade
 
 # Resources
 seed = Resource(name="Seed",amount=0.0,max_amount=10.0)

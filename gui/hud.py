@@ -39,12 +39,12 @@ class Hud:
         
         Hud.node_name.text = node.converter.name
 
-        if node.in_recipes:
+        if node.converter.needs:
             Hud.node_name <= create_tspan('Needs:',x=10,dy=25)
             for in_recipe in node.converter.needs:
                 text = f'{in_recipe.resource.name} [>={in_recipe.at_least}]: {in_recipe.amount:.2f}'
                 Hud.node_name <= create_tspan(test,x=20)
-        if node.out_recipes:
+        if node.converter.makes:
             Hud.node_name <= create_tspan('Produces:',x=10,dy=25)
             for out_recipe in node.converter.makes:
                 text = f'{out_recipe.resource.name}: {out_recipe.amount:.2f}'

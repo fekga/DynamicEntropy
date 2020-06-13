@@ -3,8 +3,9 @@ from browser import document, svg, timer
 document["loading"].attrs["style"] = "display:none"
 document["content"].attrs["style"] = "display:block"
 
-
-from core.core import *
+from core.converter import Converter
+from core.resource import Resource
+from core.upgrade import Upgrade
 from core.data import *
 from gui.gui import *
 
