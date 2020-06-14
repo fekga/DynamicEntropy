@@ -10,43 +10,56 @@ class Hud:
     panel = document['panel']
     rect = panel.parent.getBoundingClientRect()
     width,height = rect.width,rect.height
-    node_name = svg.text("", x=10, y=0, z=10, font_size=20,text_anchor="start")
-
-    panel <= node_name
-
-    hover_node = None
-    active_node = None
+    hud_info = svg.text("", x=0, y=0, font_size=20,text_anchor="start")
+    hud_bounding = svg.rect(x=0, y=0, width=100, height=100, stroke="black", fill="white")
+    # add to panel manually later
+    active = False
     tspans = []
 
-    def set_active(node):
-        Hud.active_node = node if node != Hud.active_node else None
-        Hud.show_info(node)
+    def clear_hud():
+        Hud.hud_info.text = ''
+        for e in Hud.tspans:
+            del e
+        Hud.tspans.clear()
+        Hud.hud_info.attrs["visibility"] = "hidden"
+        Hud.hud_bounding.attrs["visibility"] = "hidden"
 
-    def show_info(node):
-        if node is None:
-            return
-        if Hud.active_node is not None:
-            node = Hud.active_node
-        elif node == Hud.hover_node:
-            Hud.hover_node = None
-            Hud.node_name.text = ''
-            for e in Hud.tspans:
-                del e
-            return
-        else:
-            Hud.hover_node = node
-        Hud.tspans = []
-        
-        Hud.node_name.text = node.converter.name
-
+    def create_hud_content(node):
+        # As 0,0 is the start position
+        Hud.hud_info.text = node.converter.name
         if node.converter.needs:
-            Hud.node_name <= create_tspan('Needs:',x=10,dy=25)
+            Hud.hud_info <= create_tspan('Needs:',x=10,dy=25)
             for in_recipe in node.converter.needs:
                 text = f'{in_recipe.resource.name} [>={in_recipe.at_least}]: {in_recipe.amount:.2f}'
-                Hud.node_name <= create_tspan(test,x=20)
+                Hud.hud_info <= create_tspan(text,x=20)
         if node.converter.makes:
-            Hud.node_name <= create_tspan('Produces:',x=10,dy=25)
+            Hud.hud_info <= create_tspan('Produces:',x=10,dy=25)
             for out_recipe in node.converter.makes:
                 text = f'{out_recipe.resource.name}: {out_recipe.amount:.2f}'
-                Hud.node_name <= create_tspan(text,x=20)
-        Hud.node_name.attrs['y'] = Hud.height - 20 - (len(Hud.tspans)-2) * 20 - 50
+                Hud.hud_info <= create_tspan(text,x=20,)
+
+    def calc_container_width(spans):
+        container_width = 0
+        for sp in spans:
+            container_width = max(container_width, len(sp.text) * 11 + int(sp.attrs["x"]))
+        return container_width
+
+    def show_info(node):
+        Hud.clear_hud() # clear
+        Hud.create_hud_content(node)
+        hud_bounding_width = Hud.calc_container_width(Hud.tspans)
+        # Create bounding rect
+        sx, sy = node.position
+        Hud.hud_bounding.attrs["x"] = sx + node.radius + 5
+        Hud.hud_bounding.attrs["y"] = sy - node.radius
+        Hud.hud_bounding.attrs["width"] = hud_bounding_width
+        Hud.hud_bounding.attrs["height"] = 25 + len(Hud.tspans)*25
+        # Update text positions
+        hud_info_sx = int(Hud.hud_bounding.attrs["x"])
+        hud_info_sy = int(Hud.hud_bounding.attrs["y"]) + 20
+        Hud.hud_info.attrs['x'] = hud_info_sx
+        Hud.hud_info.attrs['y'] = hud_info_sy
+        for e in Hud.tspans:
+            e.attrs["x"] = int(e.attrs["x"]) + int(hud_info_sx)
+        Hud.hud_info.attrs["visibility"] = "visible"
+        Hud.hud_bounding.attrs["visibility"] = "visible"

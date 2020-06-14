@@ -22,8 +22,9 @@ class Node:
         self.circle.attrs["visibility"] = "hidden"
 
     def clicked(self, event):
-        hud.Hud.set_active(self)
-        return False
+        hud.Hud.active = True
+        hud.Hud.show_info(self)
+        event.stopPropagation()
 
     def right_clicked(self, event):
         if self.converter.is_stopped():
@@ -32,16 +33,18 @@ class Node:
             self.converter.stop()
 
     def mouse_over(self, event):
-        hud.Hud.show_info(self)
+        if not hud.Hud.active:
+            hud.Hud.show_info(self)
         self.circle.attrs['stroke'] = 'orange'
-        for line,node in self.connections:
-            line.attrs['stroke'] = 'green'
+        # for line,node in self.connections:
+            # line.attrs['stroke'] = 'green'
 
     def mouse_out(self, event):
-        hud.Hud.show_info(self)
+        if not hud.Hud.active:
+            hud.Hud.clear_hud()
         self.circle.attrs['stroke'] = 'black'
-        for line,node in self.connections:
-            line.attrs['stroke'] = 'black'
+        # for line,node in self.connections:
+        #     line.attrs['stroke'] = 'black'
 
     def try_unhide_node(self):
         if self.hidden:

@@ -10,7 +10,7 @@ from gui.info_panel import InfoPanelItem
 # Init nodes
 nodes = []
 panel = document['panel']
-sX,sY=100,100
+sX, sY = 100,100
 deltaY = 0
 deltaX = 100
 maxCol = 5
@@ -22,7 +22,7 @@ for conv in Converter.converters:
     nodes.append(node)
     X += deltaX
     actCol += 1
-    Y += 20 # hack
+    Y += 20
     if actCol == maxCol:
         X = sX
         Y += deltaY
@@ -45,13 +45,7 @@ for node in nodes:
     panel <= node.circle
     panel <= node.title
 
-# def panel_click(event):
-#     hud.Hud.set_active(None)
-#     print('panel')
-#     return True
-
-# panel.bind('click',panel_click)
-
+# Drawings
 def draw_connections():
     for node_out in nodes:
         for connect_out in node_out.connections:
@@ -93,4 +87,12 @@ for idx, res in enumerate(Resource.resources):
 # Init GUI
 drawing()
 
-
+# Init HUD
+hud.Hud.panel <= hud.Hud.hud_bounding
+hud.Hud.panel <= hud.Hud.hud_info
+hud.Hud.clear_hud()
+# HUD clear event
+def panel_click(event):
+    hud.Hud.active = False
+    hud.Hud.clear_hud()
+document["play_area"].bind('click',panel_click)
