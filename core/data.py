@@ -1,6 +1,7 @@
 from core.resource import Resource
 from core.converter import Converter
-from core.upgrade import Upgrade
+from core.upgrade import Upgrade, Cost
+from core.change import Change, ChangeTo, ChangeBy
 
 # Resources
 seed = Resource(name="Seed",amount=0.0,max_amount=10.0)
@@ -12,15 +13,29 @@ stamina = Resource(name="Stamina",amount=0.0,max_amount=10.0)
 fire = Resource(name="Fire",amount=0.0,max_amount=10.0)
 brick = Resource(name="Brick",amount=0.0,max_amount=10.0)
 clay = Resource(name="Clay",amount=0.0,max_amount=10.0)
-house = Resource(name="House",amount=0.0,max_amount=1.0)
 
 # Converters
-Converter(name="Well"
+well = Converter(name="Well"
     ,needs=[
     ]
     ,makes=[
         water(amount=0.1,at_least=0.0),
     ])
+Upgrade(name="Well upgrade",
+        costs=[
+            Cost(resource=water, amount=1)
+        ],
+        requires=[],
+        changes=[
+            ChangeBy(
+                converter=well,
+                needs=[],
+                makes=[
+                    water(amount=0.2,at_least=0)
+                ]
+            )
+        ]
+)
 Converter(name="Forest"
     ,needs=[
         water(amount=2,at_least=0.0),
@@ -91,24 +106,25 @@ Converter(name="Furnace"
     ,makes=[
         brick(amount=0.1,at_least=0.0),
     ])
-Converter(name="Build house"
-    ,needs=[
-        brick(amount=0.5,at_least=5.0),
-        stamina(amount=0.5,at_least=5.0),
-    ]
-    ,makes=[
-        house(amount=0.1,at_least=0.0),
-    ])
-Converter(name="Rest"
-    ,needs=[
-        house(amount=0.0,at_least=1.0),
-    ]
-    ,makes=[
-        stamina(amount=0.1,at_least=0.0),
-    ])
-Converter(name="Sleep on the ground"
+rest = Converter(name="Rest"
     ,needs=[
     ]
     ,makes=[
         stamina(amount=0.1,at_least=0.0),
     ])
+Upgrade(name="House",
+        costs=[
+            Cost(resource=brick, amount=5),
+            Cost(resource=stamina, amount=5),
+        ],
+        requires=[],
+        changes=[
+            ChangeBy(
+                converter=rest,
+                needs=[],
+                makes=[
+                    stamina(amount=0.1)
+                ]
+            )
+        ]
+)

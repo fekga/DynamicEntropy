@@ -1,6 +1,6 @@
 # converter.py
 from dataclasses import dataclass, field
-from typing import List
+from typing import List,Type
 from core.recipe import Recipe
 
 empty = lambda: field(default_factory=list)
@@ -10,6 +10,7 @@ class Converter:
     name: str
     needs: List[Recipe] = empty()
     makes: List[Recipe] = empty()
+    upgrades: List[Type["Upgrade"]] = empty()
     converters = list()
     OK,STOPPED,NO_INPUT,MAX_OUTPUT = range(4)
     state = STOPPED

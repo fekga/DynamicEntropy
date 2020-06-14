@@ -1,13 +1,19 @@
 # hud.py
-from browser import document, svg
+from browser import document, svg, html
 
 def create_tspan(text,x,dy='1em'):
     tspan = svg.tspan(text,x=x,dy=dy)
     Hud.tspans.append(tspan)
     return tspan
 
+# Upgrade button
+def get_upgrade_btn():
+    return svg.rect(x=0,y=0,width=10,height=10,id="upgrade_rect")
+
+# Add g to the hud
+document['panel'] <= svg.g(id='hud')
 class Hud:
-    panel = document['panel']
+    panel = document['hud']
     rect = panel.parent.getBoundingClientRect()
     width,height = rect.width,rect.height
     hud_info = svg.text("", x=0, y=0, font_size=20,text_anchor="start")
@@ -15,14 +21,27 @@ class Hud:
     # add to panel manually later
     active = False
     tspans = []
+    upgrade_btn_created = False
+
+    def hud_clicked(event):
+        event.stopPropagation()
 
     def clear_hud():
         Hud.hud_info.text = ''
-        for e in Hud.tspans:
-            del e
+        if Hud.upgrade_btn_created:
+            del document["upgrade_rect"]
+        Hud.upgrade_btn_created = False
         Hud.tspans.clear()
-        Hud.hud_info.attrs["visibility"] = "hidden"
-        Hud.hud_bounding.attrs["visibility"] = "hidden"
+        Hud.panel.attrs["visibility"] = "hidden"
+
+    def hud_size():
+        brect = Hud.hud_info.getBBox()
+        return brect.width, brect.height
+
+    def hud_upgrade_buy(event, upgrade, node):
+        if upgrade.buy():
+            Hud.show_info(node)
+        event.stopPropagation()
 
     def create_hud_content(node):
         # As 0,0 is the start position
@@ -36,30 +55,41 @@ class Hud:
             Hud.hud_info <= create_tspan('Produces:',x=10,dy=25)
             for out_recipe in node.converter.makes:
                 text = f'{out_recipe.resource.name}: {out_recipe.amount:.2f}'
-                Hud.hud_info <= create_tspan(text,x=20,)
+                Hud.hud_info <= create_tspan(text,x=20)
+        if node.converter.upgrades:
+            Hud.hud_info <= create_tspan('Upgrades:', x=10, dy=25)
+            for upgrade in node.converter.upgrades:
+                text = upgrade.name + repr(upgrade.costs)
+                tspan = create_tspan(text,x=20)
+                Hud.hud_info <= tspan
+                btn_instance = get_upgrade_btn()
+                hsx, hsy = Hud.hud_size()
+                btn_instance.attrs['x'] = hsx
+                btn_instance.attrs['y'] = hsy - 25/2
+                btn_instance.bind("click", lambda ev : Hud.hud_upgrade_buy(ev, upgrade, node))
+                Hud.panel <= btn_instance
+                Hud.upgrade_btn_created = True
+        print(Hud.hud_info.getBBox())
 
-    def calc_container_width(spans):
-        container_width = 0
+    def calc_container_width(name, spans):
+        container_width = Hud.string2width(name)
         for sp in spans:
-            container_width = max(container_width, len(sp.text) * 11 + int(sp.attrs["x"]))
+            container_width = max(container_width, Hud.tspan_width(sp))
         return container_width
 
     def show_info(node):
         Hud.clear_hud() # clear
         Hud.create_hud_content(node)
-        hud_bounding_width = Hud.calc_container_width(Hud.tspans)
         # Create bounding rect
-        sx, sy = node.position
-        Hud.hud_bounding.attrs["x"] = sx + node.radius + 5
-        Hud.hud_bounding.attrs["y"] = sy - node.radius
-        Hud.hud_bounding.attrs["width"] = hud_bounding_width
-        Hud.hud_bounding.attrs["height"] = 25 + len(Hud.tspans)*25
-        # Update text positions
-        hud_info_sx = int(Hud.hud_bounding.attrs["x"])
-        hud_info_sy = int(Hud.hud_bounding.attrs["y"]) + 20
-        Hud.hud_info.attrs['x'] = hud_info_sx
-        Hud.hud_info.attrs['y'] = hud_info_sy
-        for e in Hud.tspans:
-            e.attrs["x"] = int(e.attrs["x"]) + int(hud_info_sx)
-        Hud.hud_info.attrs["visibility"] = "visible"
-        Hud.hud_bounding.attrs["visibility"] = "visible"
+        hsx, hsy = Hud.hud_size()
+        Hud.hud_bounding.attrs["width"] = hsx + 20 # plus upgrade icon
+        Hud.hud_bounding.attrs["height"] = hsy
+        # Set text start
+        Hud.hud_info.attrs["y"] = 20
+        # Translate all element
+        tx = node.position[0] + node.radius + 5
+        ty = node.position[1] - node.radius
+        Hud.panel.attrs["transform"] = f'translate({tx},{ty})'
+        # Visibility
+        Hud.panel.attrs["visibility"] = "visible"
+

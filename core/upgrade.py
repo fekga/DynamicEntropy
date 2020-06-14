@@ -7,16 +7,26 @@ from core.resource import Resource
 empty = lambda: field(default_factory=list)
 
 @dataclass
+class Cost:
+    resource: Resource
+    amount: float
+
+@dataclass
 class Upgrade:
     name: str
     changes: List[Change]
-    costs: List[Resource] = empty()
+    costs: List[Cost]
     requires: List[Type['Upgrade']] = empty()
     bought: bool = False
     upgrades = list()
 
     def __post_init__(self):
-        Upgrade.upgrades.append(self)
+        if not self.changes:
+            return
+        if len(self.changes) == 1:
+            self.changes[0].converter.upgrades.append(self)
+        else:
+            Upgrade.upgrades.append(self)
 
     def __repr__(self):
         if self.bought:

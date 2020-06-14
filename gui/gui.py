@@ -91,6 +91,8 @@ drawing()
 hud.Hud.panel <= hud.Hud.hud_bounding
 hud.Hud.panel <= hud.Hud.hud_info
 hud.Hud.clear_hud()
+panel <= svg.use(href="#hud")
+document["hud"].bind('click',hud.Hud.hud_clicked)
 # HUD clear event
 def panel_click(event):
     hud.Hud.active = False
