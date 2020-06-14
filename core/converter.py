@@ -30,7 +30,7 @@ class Converter:
     def stay_hidden(self):
         if self.needs is not None:
             for recipe in self.needs:
-                if recipe.resource.amount <= 0:
+                if recipe.resource.amount <= 0 and recipe.amount != 0:
                     return True
         return False
 
@@ -44,9 +44,7 @@ class Converter:
                 return
         for recipe in self.needs:
             resource = recipe.resource
-            if (not resource.can_take(recipe.amount)
-                or resource.amount < recipe.at_least
-                or resource.amount > recipe.at_most):
+            if (not resource.can_take_recipe(recipe)):
                 self.state = Converter.NO_INPUT
                 return
         self.state = Converter.OK

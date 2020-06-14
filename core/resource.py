@@ -2,6 +2,8 @@
 from dataclasses import dataclass
 from core.recipe import Recipe
 
+float_eps = 1e-10
+
 @dataclass
 class Resource:
     name: str
@@ -14,7 +16,12 @@ class Resource:
         Resource.resources.append(self)
 
     def can_take(self, amount):
-        return amount <= self.amount
+        return self.amount >= amount - float_eps
+
+    def can_take_recipe(self, recipe):
+        return (self.can_take(recipe.amount)
+        and self.amount >= recipe.at_least - float_eps
+        and self.amount + self._delay <= recipe.at_most + float_eps)
 
     def take(self, amount):
         if self.can_take(amount):

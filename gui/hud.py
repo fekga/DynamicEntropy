@@ -69,7 +69,6 @@ class Hud:
                 btn_instance.bind("click", lambda ev : Hud.hud_upgrade_buy(ev, upgrade, node))
                 Hud.panel <= btn_instance
                 Hud.upgrade_btn_created = True
-        print(Hud.hud_info.getBBox())
 
     def calc_container_width(name, spans):
         container_width = Hud.string2width(name)
