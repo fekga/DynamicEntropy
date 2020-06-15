@@ -11,18 +11,23 @@ class Converter:
     needs: List[Recipe] = empty()
     makes: List[Recipe] = empty()
     upgrades: List[Type["Upgrade"]] = empty()
+    unstoppable : bool = False
     converters = list()
     OK,STOPPED,NO_INPUT,MAX_OUTPUT = range(4)
     state = STOPPED
 
+
     def __post_init__(self):
         Converter.converters.append(self)
+        if self.unstoppable:
+            self.state = self.NO_INPUT
 
     def start(self):
         self.state = Converter.OK
 
     def stop(self):
-        self.state = Converter.STOPPED
+        if not self.unstoppable:
+            self.state = Converter.STOPPED
 
     def is_stopped(self):
         return self.state == Converter.STOPPED

@@ -16,19 +16,14 @@ brick = Resource(name="Brick",amount=0.0,max_amount=100)
 clay = Resource(name="Clay",amount=0.0,max_amount=100)
 
 # Converters
-Converter(name="Wake up"
+Converter(name="Wake up", unstoppable=True
     ,needs=[
         dreaming(amount=dreaming.max_amount, at_least=dreaming.max_amount),
     ]
     ,makes=[
         stamina(amount=stamina.max_amount)
     ])
-Converter(name="Twiddling thumbs"
-    ,needs=[
-        stamina(amount=1),
-    ]
-    ,makes=[])
-sleep = Converter(name="Sleep"
+sleep = Converter(name="Sleep", unstoppable=True
     ,needs=[
         stamina(at_most=1, amount=0),
         dreaming(amount=0),
@@ -52,6 +47,11 @@ Upgrade(name="House",
             )
         ]
 )
+Converter(name="Twiddling thumbs"
+    ,needs=[
+        stamina(amount=1),
+    ]
+    ,makes=[])
 well = Converter(name="Well"
     ,needs=[
         stamina(amount=4)

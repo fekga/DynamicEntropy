@@ -35,7 +35,8 @@ class Node:
     def mouse_over(self, event):
         if not hud.Hud.active:
             hud.Hud.show_info(self)
-        self.circle.attrs['stroke'] = 'orange'
+        if not self.unstoppable:
+            self.circle.attrs['stroke'] = 'orange'
         # for line,node in self.connections:
             # line.attrs['stroke'] = 'green'
 
@@ -68,7 +69,7 @@ class Node:
             elif state == Converter.NO_INPUT:
                 color = "yellow"
             elif state == Converter.MAX_OUTPUT:
-                color = "red"
+                color = "darkgreen"
             else:
                 color = "blue" # error
             self.circle.attrs["fill"] = color
