@@ -5,6 +5,7 @@ from core.converter import Converter
 from gui.node import Node
 import gui.hud as hud
 from gui.info_panel import InfoPanelItem
+from gui.navigation import Navigation
 
 
 # Init nodes
@@ -98,3 +99,7 @@ def panel_click(event):
     hud.Hud.active = False
     hud.Hud.clear_hud()
 document["play_area"].bind('click',panel_click)
+
+# Create navigation
+Navigation(graphic_item=document['panel'], event_item=document['play_area'])
+
