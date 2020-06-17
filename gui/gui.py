@@ -89,8 +89,6 @@ for idx, res in enumerate(Resource.resources):
 drawing()
 
 # Init HUD
-hud.Hud.panel <= hud.Hud.hud_bounding
-hud.Hud.panel <= hud.Hud.hud_info
 hud.Hud.clear_hud()
 panel <= svg.use(href="#hud")
 document["hud"].bind('click',hud.Hud.hud_clicked)
