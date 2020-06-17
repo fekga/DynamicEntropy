@@ -9,6 +9,7 @@ class Navigation:
         self.event_item = event_item
         self.init_translate = 0,0
         self.scale = 1
+        self.started = False
         # Binds
         self.event_item.bind('mousedown', lambda ev: self.move_from(ev))
         self.event_item.bind('mouseup', lambda ev: self.move_to(ev))
@@ -23,6 +24,7 @@ class Navigation:
         self.graphic_item.attrs["transform"] = f'translate({posX},{posY}),scale({scale})'
 
     def move_from(self, event):
+        self.started = True
         self.start_pos = event.pageX, event.pageY
         self.event_item.bind('mousemove', lambda ev: self.moving(ev))
 
@@ -40,16 +42,21 @@ class Navigation:
         return posX, posY
 
     def moving(self, event):
+        if not self.started:
+            return
         cx = event.pageX
         cy = event.pageY
         self.update_graphic(translate=self.calc_current_pos(self.init_translate, self.start_pos, (cx, cy)))
 
     def move_to(self,event):
+        if not self.started:
+            return
         self.event_item.unbind('mousemove')
         cx = event.pageX
         cy = event.pageY
         self.init_translate = self.calc_current_pos(self.init_translate, self.start_pos, (cx, cy))
         self.update_graphic()
+        self.started = False
 
     def zoom(self,event):
         delta = 0.9

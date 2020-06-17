@@ -11,6 +11,7 @@ class Change:
     converter: Converter
     needs: List[Recipe] = empty()
     makes: List[Recipe] = empty()
+    converter_new_name: str = ""
 
     def apply(self):
         def _upgrade(current_recipes,upgrade_recipes):
@@ -24,6 +25,8 @@ class Change:
                                 current_recipes[i] = upgrade
         _upgrade(self.converter.needs,self.needs)
         _upgrade(self.converter.makes,self.makes)
+        if self.converter_new_name != "":
+            self.converter.name = self.converter_new_name
 
     def __repr__(self):
         change_type = 'by' if self.delta else 'to'

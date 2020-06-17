@@ -31,14 +31,23 @@ class Upgrade:
     def __repr__(self):
         if self.bought:
             return f'{self.name} {{Bought}}'
-        s = []
+        costs_str = "Free"
         if self.costs:
-            s += ['Costs: ' + ', '.join(map(str,self.costs))]
+            costs_str = "Cost:" if len(self.costs) == 1 else "Costs:"
+            costs_str += "["
+            for c in self.costs:
+                costs_str += f'{c.resource.name}: {c.amount}'
+            costs_str += "]"
+        requires = ""
         if self.requires:
-            s += ['Requires: ' + ', '.join(map(lambda e:e.name,self.requires))]
+            requires = "Requires: ["
+            for r in self.requires:
+                requires += "\'" + r.name + "\' "
+            requires += "]"
+        changes = ""
         if self.changes:
-            s += ['Changes: ' + ', '.join(map(str,self.changes))]
-        return f'{self.name} {{{" | ".join(s)}}}'
+            changes = "Changes: WRITE_ME"
+        return f'{self.name}: {costs_str} {requires} {changes}'
 
     def buy(self):
         if self.bought:

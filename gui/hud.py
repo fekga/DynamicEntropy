@@ -7,8 +7,10 @@ def create_tspan(text,x,dy='1em'):
     return tspan
 
 # Upgrade button
-def get_upgrade_btn():
-    return svg.rect(x=0,y=0,width=10,height=10,id="upgrade_rect")
+def get_upgrade_btn(idx):
+    r = svg.rect(x=0, y=0, width=10, height=10, id="upgrade_rect")
+    r.attrs["class"] = idx
+    return r
 
 # Add g to the hud
 document['panel'] <= svg.g(id='hud')
@@ -29,7 +31,8 @@ class Hud:
     def clear_hud():
         Hud.hud_info.text = ''
         if Hud.upgrade_btn_created:
-            del document["upgrade_rect"]
+            while "upgrade_rect" in document:
+                del document["upgrade_rect"]
         Hud.upgrade_btn_created = False
         Hud.tspans.clear()
         Hud.panel.attrs["visibility"] = "hidden"
@@ -38,7 +41,9 @@ class Hud:
         brect = Hud.hud_info.getBBox()
         return brect.width, brect.height
 
-    def hud_upgrade_buy(event, upgrade, node):
+    # HACK: Upgrade can not send, idx travel through html element
+    def hud_upgrade_buy(event, idx, node):
+        upgrade = node.converter.upgrades[int(idx)]
         if upgrade.buy():
             Hud.show_info(node)
         event.stopPropagation()
@@ -46,27 +51,32 @@ class Hud:
     def create_hud_content(node):
         # As 0,0 is the start position
         Hud.hud_info.text = node.converter.name
+        if node.converter.unstoppable:
+            Hud.hud_info.text += " - [UNSTOPPABLE]"
         if node.converter.needs:
             Hud.hud_info <= create_tspan('Needs:',x=10,dy=25)
             for in_recipe in node.converter.needs:
-                text = f'{in_recipe.resource.name} [>={in_recipe.at_least}]: {in_recipe.amount:.2f}'
+                text = repr(in_recipe)
                 Hud.hud_info <= create_tspan(text,x=20)
         if node.converter.makes:
             Hud.hud_info <= create_tspan('Produces:',x=10,dy=25)
             for out_recipe in node.converter.makes:
-                text = f'{out_recipe.resource.name}: {out_recipe.amount:.2f}'
+                text = repr(out_recipe)
                 Hud.hud_info <= create_tspan(text,x=20)
         if node.converter.upgrades:
             Hud.hud_info <= create_tspan('Upgrades:', x=10, dy=25)
-            for upgrade in node.converter.upgrades:
-                text = upgrade.name + repr(upgrade.costs)
+            for idx, upgrade in enumerate(node.converter.upgrades):
+                if upgrade.bought:
+                    continue
+                text = repr(upgrade)
                 tspan = create_tspan(text,x=20)
                 Hud.hud_info <= tspan
-                btn_instance = get_upgrade_btn()
+                btn_instance = get_upgrade_btn(idx)
+                btn_instance.attrs["nodeID"] = node.converter.name
                 hsx, hsy = Hud.hud_size()
                 btn_instance.attrs['x'] = hsx
                 btn_instance.attrs['y'] = hsy - 25/2
-                btn_instance.bind("click", lambda ev : Hud.hud_upgrade_buy(ev, upgrade, node))
+                btn_instance.bind("click", lambda ev : Hud.hud_upgrade_buy(ev, ev.target.attrs["class"], node))
                 Hud.panel <= btn_instance
                 Hud.upgrade_btn_created = True
 

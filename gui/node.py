@@ -18,8 +18,7 @@ class Node:
         self.circle.bind("mouseover", self.mouse_over)
         self.circle.bind("mouseout", self.mouse_out)
         self.connections = []
-        self.hidden = True
-        self.circle.attrs["visibility"] = "hidden"
+        self.hide_all()
 
     def clicked(self, event):
         hud.Hud.active = True
@@ -35,7 +34,7 @@ class Node:
     def mouse_over(self, event):
         if not hud.Hud.active:
             hud.Hud.show_info(self)
-        if not self.unstoppable:
+        if not self.converter.unstoppable:
             self.circle.attrs['stroke'] = 'orange'
         # for line,node in self.connections:
             # line.attrs['stroke'] = 'green'
@@ -53,7 +52,7 @@ class Node:
 
     def draw(self):
         if not self.hidden:
-            self.circle.attrs["visibility"] = "visible"
+            self.unhide_all()
             # Update
             cx, cy = self.position
             self.circle.attrs["cx"] = cx
@@ -73,3 +72,13 @@ class Node:
             else:
                 color = "blue" # error
             self.circle.attrs["fill"] = color
+
+    def hide_all(self):
+        self.hidden = True
+        # self.circle.attrs["fill"] = "white"
+        self.circle.attrs["visibility"] = "hidden"
+        self.title.attrs["visibility"] = "hidden"
+    def unhide_all(self):
+        self.hidden = False
+        self.circle.attrs["visibility"] = "visible"
+        self.title.attrs["visibility"] = "visible"

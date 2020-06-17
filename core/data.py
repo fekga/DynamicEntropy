@@ -14,6 +14,11 @@ wood = Resource(name="Wood",amount=0.0,max_amount=100)
 fire = Resource(name="Fire",amount=0.0,max_amount=100)
 brick = Resource(name="Brick",amount=0.0,max_amount=100)
 clay = Resource(name="Clay",amount=0.0,max_amount=100)
+cotton = Resource(name="Cotton", amount=0, max_amount=100)
+fabric = Resource(name="Fabric", amount=0, max_amount=100)
+wheat = Resource(name="Wheat", amount=0, max_amount=100)
+flour = Resource(name="Flour", amount=0, max_amount=100)
+bread = Resource(name="Bread", amount=0, max_amount=100)
 
 # Converters
 Converter(name="Wake up", unstoppable=True
@@ -42,7 +47,23 @@ Upgrade(name="House",
                 converter=sleep,
                 needs=[],
                 makes=[
-                    dreaming(amount=20)
+                    dreaming(amount=5)
+                ]
+            )
+        ]
+)
+Upgrade(name="Bed",
+        costs=[
+            Cost(resource=wood, amount=50),
+            Cost(resource=fabric, amount=50),
+        ],
+        requires=[],
+        changes=[
+            ChangeBy(
+                converter=sleep,
+                needs=[],
+                makes=[
+                    dreaming(amount=15)
                 ]
             )
         ]
@@ -52,28 +73,66 @@ Converter(name="Twiddling thumbs"
         stamina(amount=1),
     ]
     ,makes=[])
-well = Converter(name="Well"
+
+water_source = Converter(name="Creek"
     ,needs=[
-        stamina(amount=4)
+        stamina(amount=5)
     ]
     ,makes=[
         water(amount=1,at_least=0),
     ])
-Upgrade(name="Well upgrade",
+water_upgrade_road = Upgrade(name="Built road",
         costs=[
-            Cost(resource=water, amount=10)
+            Cost(resource=brick, amount=10)
         ],
         requires=[],
         changes=[
             ChangeBy(
-                converter=well,
-                needs=[],
+                converter=water_source,
+                needs=[
+                    stamina(amount=-3)
+                ],
+                makes=[]
+            )
+        ]
+)
+water_upgrade_hole = Upgrade(name="Dig down to ground-water",
+        costs=[
+            Cost(resource=stamina, amount=100)
+        ],
+        requires=[],
+        changes=[
+            ChangeBy(
+                converter=water_source,
+                needs=[
+                    stamina(amount=5)
+                ],
                 makes=[
-                    water(amount=2,at_least=0)
+                    water(amount=1)
                 ]
             )
         ]
 )
+Upgrade(name="Build well",
+        costs=[
+            Cost(resource=stamina, amount=50),
+            Cost(resource=brick, amount=25)
+        ],
+        requires=[ water_upgrade_road, water_upgrade_hole ],
+        changes=[
+            ChangeTo(
+                converter=water_source,
+                needs=[
+                    stamina(amount=1)
+                ],
+                makes=[
+                    water(amount=1)
+                ],
+                converter_new_name="Well"
+            )
+        ]
+)
+
 Converter(name="Forest"
     ,needs=[
         water(amount=20,at_least=0),
@@ -82,7 +141,7 @@ Converter(name="Forest"
     ,makes=[
         plant(amount=30,at_least=0),
     ])
-Converter(name="Wood cutting"
+wood_cutting = Converter(name="Wood cutting"
     ,needs=[
         plant(amount=10,at_least=0),
         stamina(amount=10,at_least=0),
@@ -90,6 +149,21 @@ Converter(name="Wood cutting"
     ,makes=[
         wood(amount=6,at_least=0),
     ])
+Upgrade(name="Advanced handle",
+        costs=[
+            Cost(resource=fabric, amount=10)
+        ],
+        requires=[],
+        changes=[
+            ChangeBy(
+                converter=wood_cutting,
+                needs=[
+                    stamina(amount=5)
+                ],
+                makes=[]
+            )
+        ]
+)
 Converter(name="Gather fruit"
     ,needs=[
         stamina(amount=5,at_least=0),
@@ -100,9 +174,11 @@ Converter(name="Gather fruit"
 Converter(name="Eat fruit"
     ,needs=[
         fruit(amount=1,at_least=0),
+        dreaming(amount=0,at_most=0)
     ]
     ,makes=[
         seed(amount=10,at_least=0),
+        stamina(amount=0.1)
     ])
 Converter(name="Garden"
     ,needs=[
@@ -136,11 +212,53 @@ Converter(name="Dig clay"
     ,makes=[
         clay(amount=30,at_least=0),
     ])
-Converter(name="Furnace"
+Converter(name="Clay furnace"
     ,needs=[
         clay(amount=2,at_least=0),
         fire(amount=1,at_least=50),
     ]
     ,makes=[
         brick(amount=1,at_least=0),
+    ])
+Converter(name="Cotton field"
+    ,needs=[
+        water(amount=1,at_least=0),
+        seed(amount=0,at_least=10),
+    ]
+    ,makes=[
+        cotton(amount=1),
+    ])
+Converter(name="Loom"
+    ,needs=[
+        cotton(amount=5,at_least=0),
+        stamina(amount=3,at_least=0),
+    ]
+    ,makes=[
+        fabric(amount=1),
+    ])
+Converter(name="Wheat field"
+    ,needs=[
+        water(amount=1,at_least=0),
+        seed(amount=0,at_least=10),
+    ]
+    ,makes=[
+        wheat(amount=1)
+    ])
+Converter(name="Mill"
+    ,needs=[
+        wheat(amount=1,at_least=0),
+        stamina(amount=1),
+    ]
+    ,makes=[
+        flour(amount=0.1),
+    ])
+Converter(name="Bread furnace"
+    ,needs=[
+        flour(amount=1),
+        water(amount=0.3),
+        fire(amount=1,at_least=20),
+        stamina(amount=0.5)
+    ]
+    ,makes=[
+        bread(amount=1),
     ])

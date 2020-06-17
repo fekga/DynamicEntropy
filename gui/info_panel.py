@@ -7,16 +7,18 @@ class InfoPanelItem:
         self.resource = resource
         self.line_pos = line_pos
         line_height = 25
-        # Name string
+        voffset = 5
+        # Name string HACK:dominant-baseline
         self.text = svg.text(resource.name,
-                             x=10, y=line_pos*line_height+20,
-                             font_size=20, text_anchor="start")
+                             x=10, y=line_pos*line_height+voffset,
+                             font_size=20, text_anchor='start' )
+        self.text.attrs['dominant-baseline'] = "hanging"
         # Progress rectangle
         self.rect_width = 100
         rect_right_margin = 5
         window_width = info_panel.parent.getBoundingClientRect().width
         rect_x_start = window_width-self.rect_width-rect_right_margin
-        rect_y_start = line_pos*line_height+7
+        rect_y_start = line_pos*line_height+voffset
         rect_height = 15
         rect_rx = 5
         self.rect = svg.rect(x=rect_x_start,
@@ -24,8 +26,9 @@ class InfoPanelItem:
                              height=rect_height, rx=0)
         self.number_text = svg.text("",
                                     x=window_width-rect_right_margin-(self.rect_width/2),
-                                    y=line_pos * line_height + 20,
+                                    y=line_pos * line_height+voffset + 2,
                                     font_size=16, text_anchor="middle", font_weight="bold")
+        self.number_text.attrs['dominant-baseline'] = "hanging"
         # Contour rectangle
         id_str = "contour_" + str(line_pos)
         clip_id_str = "clip_rect_"+str(line_pos)
