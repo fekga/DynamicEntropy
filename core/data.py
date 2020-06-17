@@ -1,7 +1,7 @@
 from core.resource import Resource
 from core.converter import Converter
 from core.upgrade import Upgrade, Cost
-from core.change import Change, ChangeTo, ChangeBy
+from core.change import Change
 
 # Resources
 stamina = Resource(name="Stamina",amount=100,max_amount=100)
@@ -43,8 +43,7 @@ Upgrade(name="House",
         ],
         requires=[],
         changes=[
-            ChangeBy(
-                converter=sleep,
+            sleep.change_by(
                 needs=[],
                 makes=[
                     dreaming(amount=5)
@@ -59,8 +58,7 @@ Upgrade(name="Bed",
         ],
         requires=[],
         changes=[
-            ChangeBy(
-                converter=sleep,
+            sleep.change_by(
                 needs=[],
                 makes=[
                     dreaming(amount=15)
@@ -87,8 +85,7 @@ water_upgrade_road = Upgrade(name="Built road",
         ],
         requires=[],
         changes=[
-            ChangeBy(
-                converter=water_source,
+            water_source.change_by(
                 needs=[
                     stamina(amount=-3)
                 ],
@@ -102,8 +99,7 @@ water_upgrade_hole = Upgrade(name="Dig down to ground-water",
         ],
         requires=[],
         changes=[
-            ChangeBy(
-                converter=water_source,
+            water_source.change_by(
                 needs=[
                     stamina(amount=5)
                 ],
@@ -120,8 +116,7 @@ Upgrade(name="Build well",
         ],
         requires=[ water_upgrade_road, water_upgrade_hole ],
         changes=[
-            ChangeTo(
-                converter=water_source,
+            water_source.change_to(
                 needs=[
                     stamina(amount=1)
                 ],
@@ -155,8 +150,7 @@ Upgrade(name="Advanced handle",
         ],
         requires=[],
         changes=[
-            ChangeBy(
-                converter=wood_cutting,
+            wood_cutting.change_by(
                 needs=[
                     stamina(amount=5)
                 ],

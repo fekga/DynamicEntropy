@@ -28,7 +28,7 @@ class Hud:
 
     def hud_size():
         brect = Hud.hud_info.getBBox()
-        return brect.width, brect.height
+        return int(brect.width), int(brect.height)
 
     def hud_upgrade_buy(event, upgrade, node):
         if upgrade.buy():
@@ -39,7 +39,7 @@ class Hud:
         if elements:
             Hud.hud_info <= Hud.create_tspan(title,x=Hud.border+10+offset,dy=25)
             for element in elements:
-                text = repr(element)
+                text = str(element)
                 Hud.hud_info <= Hud.create_tspan(text,x=Hud.border+20+offset)
 
     def create_hud_content(node):
@@ -62,19 +62,19 @@ class Hud:
             for upgrade in node.converter.upgrades:
                 if upgrade.bought:
                     continue
-                Hud.hud_info <= Hud.create_tspan(upgrade.name,x=Hud.border+20)
+                Hud.hud_info <= Hud.create_tspan(upgrade.name,x=Hud.border+30)
                 
                 button = svg.rect(x=0, y=0, width=Hud.upgrade_button_size, height=Hud.upgrade_button_size)
                 hsx, hsy = Hud.hud_size()
-                button.attrs['x'] = Hud.border
-                button.attrs['y'] = hsy - Hud.upgrade_button_size
+                button.attrs['x'] = int(Hud.border + 15)
+                button.attrs['y'] = int(hsy - Hud.upgrade_button_size)
                 func = lambda ev, upgrade=upgrade: Hud.hud_upgrade_buy(ev,upgrade,node)
                 button.bind("click", func)
                 Hud.panel <= button
 
-                Hud.create_converter_elements('Costs:',upgrade.costs,offset=10)
-                Hud.create_converter_elements('Requires:',upgrade.requires,offset=10)
-                Hud.create_converter_elements('Changes:',upgrade.changes,offset=10)
+                Hud.create_converter_elements('Costs:',upgrade.costs,offset=30)
+                Hud.create_converter_elements('Requires:',upgrade.requires,offset=30)
+                Hud.create_converter_elements('Changes:',upgrade.changes,offset=30)
 
     def show_info(node):
         Hud.clear_hud() # clear
