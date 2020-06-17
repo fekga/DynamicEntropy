@@ -46,7 +46,7 @@ class Upgrade:
             requires += "]"
         changes = ""
         if self.changes:
-            changes = "Changes: WRITE_ME"
+            changes = f"Changes: {list(map(str,self.changes))}"
         return f'{self.name}: {costs_str} {requires} {changes}'
 
     def buy(self):

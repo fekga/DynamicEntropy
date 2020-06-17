@@ -28,7 +28,7 @@ class Change:
         if self.converter_new_name != "":
             self.converter.name = self.converter_new_name
 
-    def __repr__(self):
+    def __str__(self):
         change_type = 'by' if self.delta else 'to'
         s = []
         if self.needs:
@@ -41,12 +41,6 @@ class Change:
 class ChangeTo(Change):
     delta: bool = False
 
-    def __repr__(self):
-        return super().__repr__()
-
 @dataclass
 class ChangeBy(Change):
     delta: bool = True
-
-    def __repr__(self):
-        return super().__repr__()

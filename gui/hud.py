@@ -25,30 +25,30 @@ class Hud:
         Hud.panel.clear()
         Hud.hud_info.clear()
         Hud.panel.attrs["visibility"] = "hidden"
-        Hud.hud_info = svg.text("", x=0, y=0, font_size=20,text_anchor="start")
-        Hud.hud_bounding = svg.rect(x=0, y=0, width=100, height=100, stroke="black", fill="white")
-        Hud.panel <= Hud.hud_bounding
-        Hud.panel <= Hud.hud_info
 
     def hud_size():
         brect = Hud.hud_info.getBBox()
         return brect.width, brect.height
 
-    # HACK: Upgrade can not send, idx travel through html element
     def hud_upgrade_buy(event, upgrade, node):
         if upgrade.buy():
             Hud.show_info(node)
         event.stopPropagation()
 
-    def create_converter_elements(title,elements):
+    def create_converter_elements(title,elements,offset=0):
         if elements:
-            Hud.hud_info <= Hud.create_tspan(title,x=Hud.border+10,dy=25)
+            Hud.hud_info <= Hud.create_tspan(title,x=Hud.border+10+offset,dy=25)
             for element in elements:
                 text = repr(element)
-                Hud.hud_info <= Hud.create_tspan(text,x=Hud.border+20)
+                Hud.hud_info <= Hud.create_tspan(text,x=Hud.border+20+offset)
 
     def create_hud_content(node):
         # As 0,0 is the start position
+        Hud.hud_bounding = svg.rect(x=0, y=0, width=100, height=100, stroke="black", fill="white")
+        Hud.hud_info = svg.text("", x=0, y=0, font_size=20,text_anchor="start")
+        Hud.panel <= Hud.hud_bounding
+        Hud.panel <= Hud.hud_info
+
         name = node.converter.name
         if node.converter.unstoppable:
             name += " - [UNSTOPPABLE]"
@@ -59,11 +59,10 @@ class Hud:
         
         if node.converter.upgrades:
             Hud.hud_info <= Hud.create_tspan('Upgrades:',x=Hud.border+10,dy=25)
-            for idx, upgrade in enumerate(node.converter.upgrades):
+            for upgrade in node.converter.upgrades:
                 if upgrade.bought:
                     continue
-                text = repr(upgrade)
-                Hud.hud_info <= Hud.create_tspan(text,x=Hud.border+20)
+                Hud.hud_info <= Hud.create_tspan(upgrade.name,x=Hud.border+20)
                 
                 button = svg.rect(x=0, y=0, width=Hud.upgrade_button_size, height=Hud.upgrade_button_size)
                 hsx, hsy = Hud.hud_size()
@@ -72,6 +71,10 @@ class Hud:
                 func = lambda ev, upgrade=upgrade: Hud.hud_upgrade_buy(ev,upgrade,node)
                 button.bind("click", func)
                 Hud.panel <= button
+
+                Hud.create_converter_elements('Costs:',upgrade.costs,offset=10)
+                Hud.create_converter_elements('Requires:',upgrade.requires,offset=10)
+                Hud.create_converter_elements('Changes:',upgrade.changes,offset=10)
 
     def show_info(node):
         Hud.clear_hud() # clear
