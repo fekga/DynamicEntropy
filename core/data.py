@@ -19,6 +19,9 @@ fabric = Resource(name="Fabric", amount=0, max_amount=100)
 wheat = Resource(name="Wheat", amount=0, max_amount=100)
 flour = Resource(name="Flour", amount=0, max_amount=100)
 bread = Resource(name="Bread", amount=0, max_amount=100)
+iron_ore = Resource(name="Iron ore", amount=0, max_amount=100)
+iron = Resource(name="Iron", amount=0, max_amount=100)
+tool = Resource(name="Tool", amount=0, max_amount=10)
 
 # Converters
 Converter(name="Wake up", unstoppable=True
@@ -164,6 +167,7 @@ Upgrade(name="Advanced handle",
             )
         ]
 )
+
 Converter(name="Gather fruit"
     ,needs=[
         stamina(amount=5,at_least=0),
@@ -204,14 +208,29 @@ Converter(name="Fireplace"
     ,makes=[
         fire(amount=30,at_least=0),
     ])
-Converter(name="Dig clay"
+
+dig_clay = Converter(name="Dig clay"
     ,needs=[
         stamina(amount=5,at_least=0),
         water(amount=5,at_least=50),
     ]
     ,makes=[
-        clay(amount=30,at_least=0),
+        clay(amount=3,at_least=0),
     ])
+Upgrade(name="Use digger",
+        costs=[
+            Cost(resource=tool, amount=1)
+        ],
+        requires=[],
+        changes=[
+            ChangeTo(
+                converter=dig_clay,
+                needs=[stamina(amount=1)],
+                makes=[clay(amount=3)]
+            )
+        ]
+)
+
 Converter(name="Clay furnace"
     ,needs=[
         clay(amount=2,at_least=0),
@@ -261,4 +280,55 @@ Converter(name="Bread furnace"
     ]
     ,makes=[
         bread(amount=1),
+    ])
+
+iron_mine = Converter(name="Iron mine"
+    ,needs=[
+        stamina(amount=5)
+    ]
+    ,makes=[
+        iron_ore(amount=.1)
+    ])
+Upgrade(name="Use pickaxe",
+        costs=[
+            Cost(resource=tool, amount=1)
+        ],
+        requires=[],
+        changes=[
+            ChangeBy(
+                converter=iron_mine,
+                needs=[stamina(-4)],
+                makes=[]
+            )
+        ]
+)
+Upgrade(name="Build minecart",
+        costs=[
+            Cost(resource=tool, amount=1)
+        ],
+        requires=[],
+        changes=[
+            ChangeBy(
+                converter=iron_mine,
+                needs=[],
+                makes=[iron_ore(.4)]
+            )
+        ]
+)
+
+Converter(name="Iron smelter"
+    ,needs=[
+        iron_ore(amount=1),
+        fire(amount=5)
+    ]
+    ,makes=[
+        iron(amount=.1)
+    ])
+Converter(name="Tool maker"
+    ,needs=[
+        iron(amount=5),
+        fire(amount=1)
+    ]
+    ,makes=[
+        tool(amount=1)
     ])
