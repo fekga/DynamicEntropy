@@ -217,8 +217,7 @@ Upgrade(name="Use digger",
         ],
         requires=[],
         changes=[
-            ChangeTo(
-                converter=dig_clay,
+            dig_clay.change_to(
                 needs=[stamina(amount=1)],
                 makes=[clay(amount=3)]
             )
@@ -289,8 +288,7 @@ Upgrade(name="Use pickaxe",
         ],
         requires=[],
         changes=[
-            ChangeBy(
-                converter=iron_mine,
+            iron_mine.change_by(
                 needs=[stamina(-4)],
                 makes=[]
             )
@@ -302,8 +300,7 @@ Upgrade(name="Build minecart",
         ],
         requires=[],
         changes=[
-            ChangeBy(
-                converter=iron_mine,
+            iron_mine.change_by(
                 needs=[],
                 makes=[iron_ore(.4)]
             )
