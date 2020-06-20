@@ -11,6 +11,9 @@ class Cost:
     resource: Resource
     amount: float
 
+    def __str__(self):
+        return f'{self.amount} {self.resource.name}'
+
 @dataclass
 class Upgrade:
     name: str
@@ -48,6 +51,9 @@ class Upgrade:
         if self.changes:
             changes = f"Changes: {list(map(str,self.changes))}"
         return f'{self.name}: {costs_str} {requires} {changes}'
+
+    def __str__(self):
+        return self.name
 
     def buy(self):
         if self.bought:

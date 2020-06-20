@@ -2,6 +2,7 @@
 from dataclasses import dataclass, field
 from typing import List,Type
 from core.recipe import Recipe
+from core.change import Change
 
 empty = lambda: field(default_factory=list)
 
@@ -58,11 +59,11 @@ class Converter:
         for recipe in self.makes:
             recipe.resource.give(recipe.amount)
 
-    def change_by(self, *, needs=None, makes=None):
-        return ChangeBy(self,needs,makes)
+    def change_by(self, *, needs=None, makes=None, converter_new_name = ''):
+        return Change(self,delta=True,needs=needs,makes=makes, converter_new_name=converter_new_name)
 
-    def change_to(self, *, needs=None, makes=None):
-        return ChangeTo(self,needs,makes)
+    def change_to(self, *, needs=None, makes=None,converter_new_name = ''):
+        return Change(self,delta=False,needs=needs,makes=makes,converter_new_name=converter_new_name)
 
     def __repr__(self):
         s = []

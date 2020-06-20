@@ -26,5 +26,19 @@ class Recipe:
         at_least_most = f'[{at_most_str}>={at_least_str}] ' if at_least_str+at_most_str else ''
         return f'{self.resource.name} {at_least_most}: {self.amount}'
 
+    def __str__(self):
+        s = []
+        at_least_str = f'{self.at_least}' if self.at_least != 0 else ''
+        at_most_str = f'{self.at_most}' if self.at_most != float('inf') else ''
+        if self.amount != 0:
+            s += [f'{self.amount}']
+        if at_least_str:
+            s += ['at least ' + at_least_str]
+        if at_most_str:
+            s += ['at most ' + at_most_str]
+        if s:
+            return f'{self.resource.name}: ' + ', '.join(s)
+        return ''
+
     def __eq__(self, other):
         return self.resource.name == other.resource.name
