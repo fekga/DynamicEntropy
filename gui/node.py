@@ -11,7 +11,7 @@ class Node:
         self.position = pos
         self.circle = svg.circle(cx=0, cy=0, r=self.radius,stroke="black",stroke_width="2",fill="green")
         self.circle.attrs["id"] = self.converter.name
-        self.title = svg.text(self.converter.name, x=0, y=self.radius+15, z=10, font_size=15,text_anchor="middle")
+        self.title = svg.text(self.converter.name, x=0, y=self.radius + 15, z=10, font_size=15, text_anchor="middle")
         x,y = self.position
         self.circle.bind("click", self.clicked)
         self.circle.bind("contextmenu", self.right_clicked)
@@ -82,3 +82,9 @@ class Node:
         self.hidden = False
         self.circle.attrs["visibility"] = "visible"
         self.title.attrs["visibility"] = "visible"
+
+    def changeName(self, newName):
+        self.converter.changeName(newName)
+        print("change")
+        self.title.textContent = newName
+        print("changed")

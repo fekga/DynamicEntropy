@@ -108,7 +108,7 @@ water_upgrade_hole = Upgrade(name="Dig down to ground-water",
                 ],
                 makes=[
                     water(amount=1)
-                ]
+                ],
             )
         ]
 )

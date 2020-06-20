@@ -26,7 +26,7 @@ class Change:
         _upgrade(self.converter.needs,self.needs)
         _upgrade(self.converter.makes,self.makes)
         if self.converter_new_name:
-            self.converter.name = self.converter_new_name
+            self.converter.changeName(self.converter_new_name)
 
     def __str__(self):
         text = f'{self.converter.name} will '

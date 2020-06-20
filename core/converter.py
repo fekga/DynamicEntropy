@@ -59,6 +59,9 @@ class Converter:
         for recipe in self.makes:
             recipe.resource.give(recipe.amount)
 
+    def changeName(self, newName):
+        self.name = newName
+
     def change_by(self, *, needs=None, makes=None, converter_new_name = ''):
         return Change(self,delta=True,needs=needs,makes=makes, converter_new_name=converter_new_name)
 
