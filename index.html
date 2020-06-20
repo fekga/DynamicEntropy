@@ -9,7 +9,7 @@
         <script type="text/javascript" src="brython/3_8_8/brython_modules.js"></script>
         <link rel="stylesheet" type="text/css" href="main.css">
 
-        <link rel="icon" type="image/png" href="images/favicon.png">
+        <link rel="icon" type="image/png" href="images/load_icon.png">
     </head>
     <body oncontextmenu="return false;" onload="brython({indexedDB:false})">
         <div id="content">
@@ -26,7 +26,10 @@
             <input type="checkbox" id="dev_tick">
         </div>
         <div id="loading">
-            Loading...<progress></progress>
+            Loading...
+            <div id="load_element">
+                <img src="images/load_icon.png" id="load_icon">
+            </div>
         </div>
 </body>
 </html>
