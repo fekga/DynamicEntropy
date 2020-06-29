@@ -155,7 +155,7 @@ Upgrade(name="Advanced handle",
         changes=[
             wood_cutting.change_by(
                 needs=[
-                    stamina(amount=5)
+                    stamina(amount=-5)
                 ],
                 makes=[]
             )
