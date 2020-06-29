@@ -122,5 +122,4 @@ def dev_tick(event):
         tick_caller = timer.set_interval(tick, 50)
     else:
         tick_caller = timer.set_interval(tick, 500)
-    print("click")
 dev_tick_check_box.bind("click", dev_tick)
