@@ -55,6 +55,12 @@ class Upgrade:
     def __str__(self):
         return self.name
 
+    def all_requirements_bought(self):
+        for r in self.requires:
+            if not r.bought:
+                return False
+        return True
+
     def buy(self):
         if self.bought:
             return False

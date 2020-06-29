@@ -75,7 +75,7 @@ Converter(name="Twiddling thumbs"
     ]
     ,makes=[])
 
-water_source = Converter(name="Creek"
+water_source = Converter(name="Water source"
     ,needs=[
         stamina(amount=5)
     ]

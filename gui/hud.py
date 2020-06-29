@@ -63,8 +63,11 @@ class Hud:
                 if upgrade.bought:
                     continue
                 Hud.hud_info <= Hud.create_tspan(upgrade.name,x=Hud.border+30)
-                
-                button = svg.rect(x=0, y=0, width=Hud.upgrade_button_size, height=Hud.upgrade_button_size)
+
+                button_color = "white"
+                if upgrade.all_requirements_bought():
+                    button_color = "black"
+                button = svg.rect(x=0, y=0, width=Hud.upgrade_button_size, height=Hud.upgrade_button_size, stroke="black", fill=button_color)
                 hsx, hsy = Hud.hud_size()
                 button.attrs['x'] = int(Hud.border + 15)
                 button.attrs['y'] = int(hsy - Hud.upgrade_button_size)
@@ -72,9 +75,11 @@ class Hud:
                 button.bind("click", func)
                 Hud.panel <= button
 
-                Hud.create_converter_elements('Costs:',upgrade.costs,offset=30)
-                Hud.create_converter_elements('Requires:',upgrade.requires,offset=30)
-                Hud.create_converter_elements('Changes:',upgrade.changes,offset=30)
+                if upgrade.all_requirements_bought():
+                    Hud.create_converter_elements('Costs:',upgrade.costs,offset=30)
+                    Hud.create_converter_elements('Changes:',upgrade.changes,offset=30)
+                else:
+                    Hud.create_converter_elements('Requires:',upgrade.requires,offset=30)
 
     def show_info(node):
         Hud.clear_hud() # clear

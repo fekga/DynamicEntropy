@@ -17,6 +17,7 @@ html, body, #content {
     min-height: 100%;
     left: 5%;
     margin: 0;
+    user-select: none;
 }
 svg#play_area
 {
