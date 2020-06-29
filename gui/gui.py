@@ -1,11 +1,12 @@
 # gui.py
-from browser import document, svg, html
+from browser import document, svg, html, timer
 from core.resource import Resource
 from core.converter import Converter
 from gui.node import Node
 import gui.hud as hud
 from gui.info_panel import InfoPanelItem
 from gui.navigation import Navigation
+from main import tick, tick_caller
 
 
 # Init nodes
@@ -101,3 +102,25 @@ document["play_area"].bind('click',panel_click)
 # Create navigation
 Navigation(graphic_item=document['panel'], event_item=document['play_area'])
 
+# Initialize drawing thread
+timer.set_interval(drawing, 100)
+
+# Hard reset button connection
+def hard_reset(event):
+    for r in Resource.resources:
+        r.amount = 0
+    for c in Converter.converters:
+        c.running = False
+document["reset"].bind("click", hard_reset)
+
+# Dev tick checkbox connection
+dev_tick_check_box = document["dev_tick_checkbox"]
+def dev_tick(event):
+    global tick_caller
+    timer.clear_interval(tick_caller)
+    if event.target.checked:
+        tick_caller = timer.set_interval(tick, 50)
+    else:
+        tick_caller = timer.set_interval(tick, 500)
+    print("click")
+dev_tick_check_box.bind("click", dev_tick)

@@ -6,22 +6,25 @@ html, body, #content {
     width: 100%;
     min-height: 100%;
     height: 500px;
-    text-align: center;
+    margin: 0;
+    border: 0;
+    padding: 0;
 }
 #content {
+    display:block;
+    position:absolute;
     width: 90%;
+    min-height: 100%;
     left: 5%;
-    text-align: center;
     margin: 0;
 }
 svg#play_area
 {
-    position:relative;
-    min-height: 100%;
-    height: 500px;
+    position: relative;
+    min-height: 90%; /* fix me: set the hight to correct value */
+    height: 550px;
     width: 100%;
     border: 1px solid #000;
-    text-align: center;
     margin: 0;
 }
 svg#info_area
@@ -38,11 +41,46 @@ svg#info_area
 #panel {
     display:block-inline;
     width: 100%;
-    min-height: 100%;
 }
 
-button {
+#top_menu_bar {
+    position: relative;
+    width: calc(100% - 200px); /*minus info area*/
+    height: 50px;
+    border: 1px solid #000;
+    /*border-bottom: none;*/
+    top:0;
+}
+#menu_bar_items_right_aligned {
     display: block;
+    position: absolute;
+    top: 15px;
+    right:0;
+}
+#dev_tick {
+    display: inline-block;
+    position: relative;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+#dev_tick #dev_tick_checkbox {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border: 1px solid #000;
+    background: #FFF;
+}
+#reset {
+    display: inline-block;
+    position: relative;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+#timer {
+    display: inline-block;
+    position: relative;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 /* Loading page trick */

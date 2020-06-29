@@ -13,6 +13,16 @@
     </head>
     <body oncontextmenu="return false;" onload="brython({indexedDB:false})">
         <div id="content">
+            <div id="top_menu_bar">
+                <div id="menu_btns">
+<!--                    TODO-->
+                </div>
+                <div id="menu_bar_items_right_aligned">
+                    <div id="dev_tick">Dev tick <input type="checkbox" id="dev_tick_checkbox"></div>
+                    <button id="reset">Reset</button>
+<!--                    <div id="timer">Playtime</div>-->
+                </div>
+            </div>
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                 id="play_area">
                 <g id="panel"></g>
@@ -22,8 +32,6 @@
                 <g id="info_panel"></g>
             </svg>
             <script type="text/python" src="main.py"></script>
-            <button id="reset">Reset</button>
-            <input type="checkbox" id="dev_tick">
         </div>
         <div id="loading">
             Loading...
