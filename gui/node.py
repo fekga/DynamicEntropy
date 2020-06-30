@@ -9,7 +9,7 @@ class Node:
     def __init__(self, converter, pos):
         self.converter = converter
         self.position = pos
-        self.circle = svg.circle(cx=0, cy=0, r=self.radius,stroke="black",stroke_width="2",fill="green")
+        self.circle = svg.circle(cx=0, cy=0, r=self.radius,stroke="black",stroke_width="4",fill="green")
         self.circle.attrs["id"] = self.converter.name
         self.title = svg.text(self.converter.name, x=0, y=self.radius + 15, z=10, font_size=15, text_anchor="middle")
         x,y = self.position
@@ -19,6 +19,12 @@ class Node:
         self.circle.bind("mouseout", self.mouse_out)
         self.connections = []
         self.hide_all()
+
+    def highlight_node(self, color):
+        self.circle.attrs['stroke'] = color
+
+    def remove_highlight_node(self):
+        self.circle.attrs['stroke'] = 'black'
 
     def clicked(self, event):
         hud.Hud.active = True
@@ -35,16 +41,12 @@ class Node:
         if not hud.Hud.active:
             hud.Hud.show_info(self)
         if not self.converter.unstoppable:
-            self.circle.attrs['stroke'] = 'orange'
-        # for line,node in self.connections:
-            # line.attrs['stroke'] = 'green'
+            self.highlight_node('orange')
 
     def mouse_out(self, event):
         if not hud.Hud.active:
             hud.Hud.clear_hud()
-        self.circle.attrs['stroke'] = 'black'
-        # for line,node in self.connections:
-        #     line.attrs['stroke'] = 'black'
+        self.remove_highlight_node()
 
     def try_unhide_node(self):
         if self.hidden:
@@ -83,8 +85,8 @@ class Node:
         self.circle.attrs["visibility"] = "visible"
         self.title.attrs["visibility"] = "visible"
 
-    def changeName(self, newName):
-        self.converter.changeName(newName)
-        print("change")
-        self.title.textContent = newName
-        print("changed")
+    # def changeName(self, newName):
+    #     self.converter.changeName(newName)
+    #     print("change")
+    #     self.title.textContent = newName
+    #     print("changed")
