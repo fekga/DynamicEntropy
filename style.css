@@ -91,6 +91,11 @@ svg#info_area
 #loading {
     display:block;
     text-align: center;
+    margin: 0;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 path {
@@ -119,10 +124,38 @@ svg {
     dominant-baseline: hanging;
 }
 
-#load_element img {
-    animation: spin 4s linear infinite;
+#load_element .dot {
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    display: inline-block;
+    border-radius: 10px;
+    border: 1px solid black;
 }
-@keyframes spin {
-  from {transform: rotate(0deg);}
-  to {transform: rotate(360deg);}
+
+.dot[dot='1'] {
+    background-color: #ff8572;
+    animation: bounce .5s infinite alternate;
+    animation-delay: 0s;
+}
+
+.dot[dot='2'] {
+    background-color: #72afff;
+    animation: bounce .5s 0s infinite alternate;
+    animation-delay: 0.25s;
+}
+
+.dot[dot='3'] {
+    background-color: #91ff72;
+    animation: bounce .5s 0s infinite alternate;
+    animation-delay: 0.5s;
+}
+
+@keyframes bounce {
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(-15px);
+  }
 }
