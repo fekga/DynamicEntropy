@@ -2,14 +2,16 @@
 from browser import document, svg, html
 from functools import partial
 
-# Add g to the hud
+
 class Hud:
+    # Add g to the hud
     panel = svg.g(id='hud')
     document['panel'] <= panel
     rect = panel.parent.getBoundingClientRect()
     width,height = rect.width,rect.height
     hud_info = svg.text("", x=0, y=0, font_size=20,text_anchor="start")
     hud_bounding = svg.rect(x=0, y=0, width=100, height=100, stroke="black", fill="white")
+    upgrades = []
     # add to panel manually later
     active = False
     border = 10
@@ -24,6 +26,7 @@ class Hud:
     def clear_hud():
         Hud.panel.clear()
         Hud.hud_info.clear()
+        Hud.upgrades.clear()
         Hud.panel.attrs["visibility"] = "hidden"
 
     def hud_size():
@@ -51,12 +54,12 @@ class Hud:
 
         name = node.converter.name
         if node.converter.unstoppable:
-            name += " - [UNSTOPPABLE]"
+            name += " - [Unstoppable]"
         Hud.hud_info <= Hud.create_tspan(name,x=Hud.border,dy=Hud.border)
         Hud.create_converter_elements('Needs:',node.converter.needs)
         Hud.create_converter_elements('Produces:',node.converter.makes)
         # Hud.create_converter_elements('Upgrades:',node.converter.upgrades)
-        
+
         if node.converter.upgrades:
             Hud.hud_info <= Hud.create_tspan('Upgrades:',x=Hud.border+10,dy=25)
             for upgrade in node.converter.upgrades:
@@ -64,15 +67,17 @@ class Hud:
                     continue
                 Hud.hud_info <= Hud.create_tspan(upgrade.name,x=Hud.border+30)
 
-                button_color = "white"
-                if upgrade.all_requirements_bought():
-                    button_color = "black"
-                button = svg.rect(x=0, y=0, width=Hud.upgrade_button_size, height=Hud.upgrade_button_size, stroke="black", fill=button_color)
+                button = svg.rect(x=0, y=0, width=Hud.upgrade_button_size, height=Hud.upgrade_button_size, stroke="black", fill="white")
                 hsx, hsy = Hud.hud_size()
                 button.attrs['x'] = int(Hud.border + 15)
                 button.attrs['y'] = int(hsy - Hud.upgrade_button_size)
                 func = lambda ev, upgrade=upgrade: Hud.hud_upgrade_buy(ev,upgrade,node)
                 button.bind("click", func)
+
+                buy_icon_appearance_func = lambda upgrade=upgrade, button=button: Hud.upgrade_button_appearance(upgrade, button)
+                Hud.upgrade_button_appearance(upgrade, button) # init
+                Hud.upgrades.append(buy_icon_appearance_func) # refresh icon updater
+
                 Hud.panel <= button
 
                 if upgrade.all_requirements_bought():
@@ -97,3 +102,13 @@ class Hud:
         # Visibility
         Hud.panel.attrs["visibility"] = "visible"
 
+    def upgrade_button_appearance(upgrade, button):
+        color = "red"
+        if upgrade.isBuyable():
+            color = "LawnGreen"
+        button.style["stroke"] = "black"
+        button.style["fill"] = color
+
+    def refresh_buy_icon():
+        for fn in Hud.upgrades:
+            fn()

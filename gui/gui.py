@@ -82,6 +82,8 @@ def drawing():
     draw_connections()
     draw_resources()
     update_menu_panel() # menu panel update (eg.: playtime)
+    hud.Hud.refresh_buy_icon() # update the buy icon in the HUD
+
 
 # Init resource texts
 info_panel_items=[]

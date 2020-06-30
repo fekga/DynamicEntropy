@@ -61,7 +61,7 @@ class Upgrade:
                 return False
         return True
 
-    def buy(self):
+    def isBuyable(self):
         if self.bought:
             return False
         for requirement in self.requires:
@@ -70,6 +70,11 @@ class Upgrade:
         for cost in self.costs:
             if not cost.resource.can_take(cost.amount):
                 return False
+        return True
+
+    def buy(self):
+        if not self.isBuyable():
+            return False
         for cost in self.costs:
             cost.resource.take(cost.amount)
         for change in self.changes:
