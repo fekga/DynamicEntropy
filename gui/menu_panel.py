@@ -1,6 +1,6 @@
 # menu_panel.py
 from browser import svg, document
+from core.time_measurement import TimeMeasurment
 
-def init_menu_panel:
-    div = html.DIV('Brython', style={'height': 100, 'width': 200})
-    document('panel') <=
+def update_menu_panel():
+    document['timer'].text = "Playtime: " + TimeMeasurment.printElapsedTime()

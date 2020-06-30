@@ -7,6 +7,7 @@ from core.converter import Converter
 from core.resource import Resource
 from core.upgrade import Upgrade
 from core.data import *
+from core.time_measurement import *
 from gui.gui import *
 
 

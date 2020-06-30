@@ -5,6 +5,7 @@ from core.converter import Converter
 from gui.node import Node
 import gui.hud as hud
 from gui.info_panel import InfoPanelItem
+from gui.menu_panel import *
 from gui.navigation import Navigation
 from main import tick, tick_caller
 
@@ -80,6 +81,7 @@ def drawing():
     draw_nodes()
     draw_connections()
     draw_resources()
+    update_menu_panel() # menu panel update (eg.: playtime)
 
 # Init resource texts
 info_panel_items=[]
