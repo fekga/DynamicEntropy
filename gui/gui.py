@@ -61,10 +61,14 @@ def draw_connections():
             d = f'M {x1} {y1} C {mx1} {my1} {mx2} {my2} {x2} {y2}'
 
             line.attrs["d"] = d
-            if node_out.converter.state == Converter.OK and not node_in.hidden:
-                line.attrs["visibility"] = "visible"
-            else:
+            if node_in.hidden or node_out.hidden:
                 line.attrs["visibility"] = "hidden"
+            else:
+                line.attrs["visibility"] = "visible"
+                if node_in.converter.state == Converter.OK:
+                    line.attrs["opacity"] = "1.0"
+                else:
+                    line.attrs["opacity"] = "0.1"
 
 
 def draw_nodes():
