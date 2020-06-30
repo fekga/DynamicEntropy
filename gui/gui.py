@@ -33,15 +33,15 @@ for conv in Converter.converters:
 
 
 # Init connections
-for node_out in nodes:
-    for out_recipe in node_out.converter.makes:
-        for node_in in nodes:
-            for in_recipe in node_in.converter.needs:
-                if out_recipe.resource == in_recipe.resource:
+for node in nodes:
+    for make in node.converter.makes:
+        for node_need in nodes:
+            for need in node_need.converter.needs:
+                if make.resource == need.resource:
                     d="M 100 350 c 100 -200 200 500 300 0"
                     line = svg.path(d=d)
                     panel <= line
-                    node_out.connections.append((line, node_in))
+                    node.connections.append((line, node_need))
 
 # Init node graphic
 for node in nodes:
@@ -92,7 +92,7 @@ def drawing():
 # Init resource texts
 info_panel_items=[]
 for idx, res in enumerate(Resource.resources):
-    info_panel_items.append(InfoPanelItem(res, idx))
+    info_panel_items.append(InfoPanelItem(res, idx, nodes))
 
 # Init GUI
 drawing()

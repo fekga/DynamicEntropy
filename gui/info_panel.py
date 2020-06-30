@@ -2,7 +2,7 @@
 from browser import svg, document
 
 class InfoPanelItem:
-    def __init__(self, resource, line_pos):
+    def __init__(self, resource, line_pos, nodes):
         info_panel = document['info_panel']
         self.resource = resource
         self.line_pos = line_pos
@@ -50,8 +50,8 @@ class InfoPanelItem:
         info_panel <= self.text
         info_panel <= self.number_text
 
-
-
+        self.text.bind("mouseover", lambda ev, nodes=nodes: self.highlight_connections(nodes))
+        self.text.bind("mouseout", lambda ev, nodes=nodes: self.remove_highlight_connections(nodes))
 
     def draw(self):
         max_amount = self.resource.max_amount
@@ -65,6 +65,28 @@ class InfoPanelItem:
             else:
                 r = (ratio-th) / (1-th) * 255
                 g = 255 - r
+            ratio = max(ratio,0)
             self.rect.attrs["width"] = self.rect_width*ratio
             self.rect.attrs["fill"] = f"rgb({r},{g},0)"
             self.number_text.text = f"{int(amount)} / {int(max_amount)}"
+
+    def highlight_connections(self, nodes):
+        for node in nodes:
+            needed = False
+            for need in node.converter.needs:
+                if need.resource == self.resource and need.amount > 0:
+                    needed = True
+            makes = False
+            for make in node.converter.makes:
+                if make.resource == self.resource and make.amount > 0:
+                    makes = True
+            if needed and makes:
+                node.highlight_node("yellow")
+            elif needed:
+                node.highlight_node("red")
+            elif makes:
+                node.highlight_node("lightgreen")
+
+    def remove_highlight_connections(self, nodes):
+        for node in nodes:
+            node.remove_highlight_node()
