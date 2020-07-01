@@ -25,7 +25,10 @@ class Node:
         self.circle.attrs['stroke'] = color
 
     def remove_highlight_node(self):
-        self.circle.attrs['stroke'] = 'black'
+        color = "black"
+        if self.converter.has_upgrade():
+            color = "darkblue"
+        self.circle.attrs['stroke'] = color
 
     def clicked(self, event):
         hud.Hud.active = True
@@ -76,12 +79,9 @@ class Node:
                 color = "blue" # error
             self.circle.attrs["fill"] = color
             # Check upgrade are available
-            upgradable_current = False
-            for upgrade in self.converter.upgrades:
-                if upgrade.isBuyable():
-                    upgradable_current = True
+            upgradable_current = self.converter.has_buyable_upgrade()
             if upgradable_current and not self.upgradable:
-                self.highlight_node("blue")
+                self.highlight_node("lightblue")
                 self.upgradable = True
             elif self.upgradable and not upgradable_current:
                 self.remove_highlight_node()

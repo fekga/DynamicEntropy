@@ -40,6 +40,17 @@ class Converter:
                     return True
         return False
 
+    def has_upgrade(self):
+        for upg in self.upgrades:
+            if not upg.bought:
+                return True
+        return False
+    def has_buyable_upgrade(self):
+        for upg in self.upgrades:
+            if upg.isBuyable():
+                return True
+        return False
+
     def update(self):
         if self.state == Converter.STOPPED:
             return
