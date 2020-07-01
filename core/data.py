@@ -133,11 +133,11 @@ Upgrade(name="Build well",
 
 Converter(name="Forest"
     ,needs=[
-        water(amount=20,at_least=0),
-        plant(amount=20,at_least=50),
+        water(amount=10,at_least=0),
+        plant(amount=10,at_least=50),
     ]
     ,makes=[
-        plant(amount=30,at_least=0),
+        plant(amount=15,at_least=0),
     ])
 wood_cutting = Converter(name="Wood cutting"
     ,needs=[
@@ -145,9 +145,9 @@ wood_cutting = Converter(name="Wood cutting"
         stamina(amount=10,at_least=0),
     ]
     ,makes=[
-        wood(amount=6,at_least=0),
+        wood(amount=3,at_least=0),
     ])
-Upgrade(name="Advanced handle",
+upgrade_advHandle = Upgrade(name="Advanced handle",
         costs=[
             Cost(resource=fabric, amount=10)
         ],
@@ -159,6 +159,36 @@ Upgrade(name="Advanced handle",
                 ],
                 makes=[]
             )
+        ])
+upgrade_ironHead = Upgrade(name="Iron axe head",
+        costs=[
+            Cost(resource=iron, amount=3)
+        ],
+        requires=[],
+        changes=[
+            wood_cutting.change_by(
+                needs=[],
+                makes=[
+                    wood(amount=4)
+                ]
+            )
+        ]
+)
+Upgrade(name="Advanced axe",
+        costs=[
+            Cost(resource=tool, amount=1)
+        ],
+        requires=[ upgrade_advHandle, upgrade_ironHead ],
+        changes=[
+            wood_cutting.change_to(
+                needs=[
+                    stamina(amount=3),
+                    plant(amount=10)
+                ],
+                makes=[
+                    wood(amount=9)
+                ]
+            )
         ]
 )
 
@@ -167,15 +197,15 @@ Converter(name="Gather fruit"
         stamina(amount=5,at_least=0),
     ]
     ,makes=[
-        fruit(amount=10,at_least=0),
+        fruit(amount=3,at_least=0),
     ])
 Converter(name="Eat fruit"
     ,needs=[
-        fruit(amount=1,at_least=0),
+        fruit(amount=1),
         dreaming(amount=0,at_most=0)
     ]
     ,makes=[
-        seed(amount=10,at_least=0),
+        seed(amount=1),
         stamina(amount=0.1)
     ])
 Converter(name="Garden"
