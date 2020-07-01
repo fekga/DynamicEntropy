@@ -15,7 +15,7 @@ fire = Resource(name="Fire",amount=0.0,max_amount=100)
 brick = Resource(name="Brick",amount=0.0,max_amount=100)
 clay = Resource(name="Clay",amount=0.0,max_amount=100)
 cotton = Resource(name="Cotton", amount=0, max_amount=100)
-fabric = Resource(name="Fabric", amount=0, max_amount=100)
+fabric = Resource(name="Fabric", amount=0, max_amount=50)
 wheat = Resource(name="Wheat", amount=0, max_amount=100)
 flour = Resource(name="Flour", amount=0, max_amount=100)
 bread = Resource(name="Bread", amount=0, max_amount=100)
@@ -33,16 +33,16 @@ Converter(name="Wake up", unstoppable=True
     ])
 sleep = Converter(name="Sleep", unstoppable=True
     ,needs=[
-        stamina(at_most=1, amount=0),
+        stamina(at_most=.99, amount=0),
         dreaming(amount=0),
     ]
     ,makes=[
         dreaming(amount=5),
     ])
-Upgrade(name="House",
+upgrade_sheck = Upgrade(name="Shack",
         costs=[
-            Cost(resource=brick, amount=5),
-            Cost(resource=stamina, amount=5),
+            Cost(resource=wood, amount=25),
+            Cost(resource=stamina, amount=50),
         ],
         requires=[],
         changes=[
@@ -54,12 +54,28 @@ Upgrade(name="House",
             )
         ]
 )
-Upgrade(name="Bed",
+upgrade_bed = Upgrade(name="Bed",
         costs=[
-            Cost(resource=wood, amount=50),
-            Cost(resource=fabric, amount=50),
+            Cost(resource=wood, amount=10),
+            Cost(resource=fabric, amount=25),
         ],
         requires=[],
+        changes=[
+            sleep.change_by(
+                needs=[],
+                makes=[
+                    dreaming(amount=5)
+                ]
+            )
+        ]
+)
+upgrade_smallHouse = Upgrade(name="Small house",
+        costs=[
+            Cost(resource=brick, amount=25),
+            Cost(resource=wood, amount=50),
+            Cost(resource=stamina, amount=50),
+        ],
+        requires=[ upgrade_sheck, upgrade_bed ],
         changes=[
             sleep.change_by(
                 needs=[],
@@ -69,6 +85,23 @@ Upgrade(name="Bed",
             )
         ]
 )
+Upgrade(name="House",
+        costs=[
+            Cost(resource=brick, amount=50),
+            Cost(resource=wood, amount=100),
+            Cost(resource=stamina, amount=80),
+        ],
+        requires=[ upgrade_smallHouse ],
+        changes=[
+            sleep.change_by(
+                needs=[],
+                makes=[
+                    dreaming(amount=20)
+                ]
+            )
+        ]
+)
+
 Converter(name="Twiddling thumbs"
     ,needs=[
         stamina(amount=1),
@@ -104,7 +137,7 @@ water_upgrade_hole = Upgrade(name="Dig down to ground-water",
         changes=[
             water_source.change_by(
                 needs=[
-                    stamina(amount=5)
+                    stamina(amount=5.1)
                 ],
                 makes=[
                     water(amount=1)
@@ -133,19 +166,19 @@ Upgrade(name="Build well",
 
 Converter(name="Forest"
     ,needs=[
-        water(amount=10,at_least=0),
-        plant(amount=10,at_least=50),
+        water(amount=.1,at_least=0),
+        plant(amount=1,at_least=50),
     ]
     ,makes=[
-        plant(amount=15,at_least=0),
+        plant(amount=2,at_least=0),
     ])
 wood_cutting = Converter(name="Wood cutting"
     ,needs=[
-        plant(amount=10,at_least=0),
+        plant(amount=5,at_least=0),
         stamina(amount=10,at_least=0),
     ]
     ,makes=[
-        wood(amount=3,at_least=0),
+        wood(amount=1,at_least=0),
     ])
 upgrade_advHandle = Upgrade(name="Advanced handle",
         costs=[
@@ -169,7 +202,7 @@ upgrade_ironHead = Upgrade(name="Iron axe head",
             wood_cutting.change_by(
                 needs=[],
                 makes=[
-                    wood(amount=4)
+                    wood(amount=3)
                 ]
             )
         ]
@@ -183,10 +216,10 @@ Upgrade(name="Advanced axe",
             wood_cutting.change_to(
                 needs=[
                     stamina(amount=3),
-                    plant(amount=10)
+                    plant(amount=11)
                 ],
                 makes=[
-                    wood(amount=9)
+                    wood(amount=10)
                 ]
             )
         ]
@@ -205,8 +238,7 @@ Converter(name="Eat fruit"
         dreaming(amount=0,at_most=0)
     ]
     ,makes=[
-        seed(amount=1),
-        stamina(amount=0.1)
+        seed(amount=.2)
     ])
 Converter(name="Garden"
     ,needs=[
@@ -218,28 +250,28 @@ Converter(name="Garden"
     ])
 Converter(name="Start a fire"
     ,needs=[
-        wood(amount=5,at_least=50),
+        wood(amount=1,at_least=50),
         stamina(amount=5,at_least=50),
     ]
     ,makes=[
-        fire(amount=5,at_least=0),
+        fire(amount=1,at_least=0),
     ])
 Converter(name="Fireplace"
     ,needs=[
-        wood(amount=5,at_least=10),
-        fire(amount=5,at_least=50),
+        wood(amount=1,at_least=10),
+        fire(amount=1,at_least=25),
     ]
     ,makes=[
-        fire(amount=30,at_least=0),
+        fire(amount=3,at_least=0),
     ])
 
 dig_clay = Converter(name="Dig clay"
     ,needs=[
         stamina(amount=5,at_least=0),
-        water(amount=5,at_least=50),
+        water(amount=.1,at_least=50),
     ]
     ,makes=[
-        clay(amount=3,at_least=0),
+        clay(amount=1,at_least=0),
     ])
 Upgrade(name="Use digger",
         costs=[
