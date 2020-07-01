@@ -60,7 +60,11 @@ class Hud:
         Hud.create_converter_elements('Produces:',node.converter.makes)
         # Hud.create_converter_elements('Upgrades:',node.converter.upgrades)
 
-        if node.converter.upgrades:
+        hasUpgrade = False
+        for u in node.converter.upgrades:
+            if not u.bought:
+                hasUpgrade = True
+        if hasUpgrade:
             Hud.hud_info <= Hud.create_tspan('Upgrades:',x=Hud.border+10,dy=25)
             for upgrade in node.converter.upgrades:
                 if upgrade.bought:
