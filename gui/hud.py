@@ -17,8 +17,12 @@ class Hud:
     border = 10
     upgrade_button_size = 10
 
-    def create_tspan(text,x,dy='1em'):
-        return svg.tspan(text,x=x,dy=dy)
+    def create_tspan(text,x,dy='1em',bold=False):
+        if bold:
+            id = "bold_text"
+        else:
+            id = "normal_text"
+        return svg.tspan(text,id=f'{id}',x=x,dy=dy)
 
     def hud_clicked(event):
         event.stopPropagation()
@@ -38,9 +42,9 @@ class Hud:
             Hud.show_info(node)
         event.stopPropagation()
 
-    def create_converter_elements(title,elements,offset=0):
+    def create_converter_elements(title,elements,offset=0,boldTitle=False):
         if elements:
-            Hud.hud_info <= Hud.create_tspan(title,x=Hud.border+10+offset,dy=25)
+            Hud.hud_info <= Hud.create_tspan(title,x=Hud.border+10+offset,dy=25,bold=boldTitle)
             for element in elements:
                 text = str(element)
                 Hud.hud_info <= Hud.create_tspan(text,x=Hud.border+20+offset)
@@ -55,9 +59,9 @@ class Hud:
         name = node.converter.name
         if node.converter.unstoppable:
             name += " - [Unstoppable]"
-        Hud.hud_info <= Hud.create_tspan(name,x=Hud.border,dy=Hud.border)
-        Hud.create_converter_elements('Needs:',node.converter.needs)
-        Hud.create_converter_elements('Produces:',node.converter.makes)
+        Hud.hud_info <= Hud.create_tspan(name,x=Hud.border,dy=Hud.border,bold=True)
+        Hud.create_converter_elements('Needs:',node.converter.needs,0,True)
+        Hud.create_converter_elements('Produces:',node.converter.makes,0,True)
         # Hud.create_converter_elements('Upgrades:',node.converter.upgrades)
 
         hasUpgrade = False
@@ -65,7 +69,7 @@ class Hud:
             if not u.bought:
                 hasUpgrade = True
         if hasUpgrade:
-            Hud.hud_info <= Hud.create_tspan('Upgrades:',x=Hud.border+10,dy=25)
+            Hud.hud_info <= Hud.create_tspan('Upgrades:',x=Hud.border+10,dy=25,bold=True)
             for upgrade in node.converter.upgrades:
                 if upgrade.bought:
                     continue

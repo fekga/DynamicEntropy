@@ -39,6 +39,10 @@ svg#info_area
     background: #FFF;
 }
 
+#hud #bold_text {
+    font-weight: bold;
+}
+
 #panel {
     display:block-inline;
     width: 100%;
