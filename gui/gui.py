@@ -32,7 +32,22 @@ for conv in Converter.converters:
         actCol = 0
 
 
-# Init connections
+### Init connections ###
+g_line = svg.g(id="connections")
+panel <= g_line
+# Line gradient style
+defs = svg.defs()
+lg = svg.linearGradient(id="lineGrad",x1="0%", y1="0%", x2="100%", y2="0%")
+s1 = svg.stop(offset="0%")
+s1.attrs["style"] = "stop-color:rgb(255,0,0);stop-opacity:1"
+lg <= s1
+s2 = svg.stop(offset="100%")
+s2.attrs["style"] = "stop-color:rgb(0,255,0);stop-opacity:1"
+lg <= s2
+defs <= lg
+g_line <= defs
+# g_line.fill = "url(#lineGrad)"
+# Init connection structures
 for node in nodes:
     for make in node.converter.makes:
         for node_need in nodes:
@@ -40,7 +55,7 @@ for node in nodes:
                 if make.resource == need.resource:
                     d="M 100 350 c 100 -200 200 500 300 0"
                     line = svg.path(d=d)
-                    panel <= line
+                    g_line <= line
                     node.connections.append((line, node_need))
 
 # Init node graphic
@@ -68,7 +83,7 @@ def draw_connections():
                 if node_in.converter.state == Converter.OK:
                     line.attrs["opacity"] = "1.0"
                 else:
-                    line.attrs["opacity"] = "0.1"
+                    line.attrs["opacity"] = "0.2"
 
 
 def draw_nodes():

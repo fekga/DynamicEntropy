@@ -98,9 +98,9 @@ svg#info_area
     transform: translate(-50%, -50%);
 }
 
-path {
+#connections path {
   fill: none;
-  stroke: black;
+  stroke:url(#lineGrad);
   stroke-width: 2;
   stroke-dashoffset: 1000;
   stroke-dasharray: 10;
@@ -127,25 +127,21 @@ svg {
     border-radius: 10px;
     border: 1px solid black;
 }
-
 .dot[dot='1'] {
     background-color: #ff8572;
     animation: bounce .5s infinite alternate;
     animation-delay: 0s;
 }
-
 .dot[dot='2'] {
     background-color: #72afff;
     animation: bounce .5s 0s infinite alternate;
     animation-delay: 0.25s;
 }
-
 .dot[dot='3'] {
     background-color: #91ff72;
     animation: bounce .5s 0s infinite alternate;
     animation-delay: 0.5s;
 }
-
 @keyframes bounce {
   from {
     transform: translateY(0px);
