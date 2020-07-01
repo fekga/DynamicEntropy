@@ -19,6 +19,7 @@ class Node:
         self.circle.bind("mouseout", self.mouse_out)
         self.connections = []
         self.hide_all()
+        self.upgradable = False
 
     def highlight_node(self, color):
         self.circle.attrs['stroke'] = color
@@ -74,6 +75,17 @@ class Node:
             else:
                 color = "blue" # error
             self.circle.attrs["fill"] = color
+            # Check upgrade are available
+            upgradable_current = False
+            for upgrade in self.converter.upgrades:
+                if upgrade.isBuyable():
+                    upgradable_current = True
+            if upgradable_current and not self.upgradable:
+                self.highlight_node("blue")
+                self.upgradable = True
+            elif self.upgradable and not upgradable_current:
+                self.remove_highlight_node()
+                self.upgradable = False
 
     def hide_all(self):
         self.hidden = True
