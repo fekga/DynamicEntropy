@@ -27,6 +27,7 @@ for conv in Converter.converters:
     actCol += 1
     Y += 20
     if actCol == maxCol:
+        sX += 10
         X = sX
         Y += deltaY
         actCol = 0
