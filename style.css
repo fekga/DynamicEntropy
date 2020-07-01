@@ -87,6 +87,21 @@ svg#info_area
     margin-left: 10px;
     margin-right: 10px;
 }
+#menu_btns {
+    position: absolute;
+    top: calc(50% - 10px); /* half of the button height */
+}
+#menu_btns div {
+    display: block;
+    position: relative;
+    width: 200px;
+    height: 20px;
+    border: 1px solid #000;
+    margin-left: 20px;
+    margin-right: 20px;
+    text-align: center;
+    cursor: pointer;
+}
 
 /* Loading page trick */
 #content {
@@ -103,12 +118,12 @@ svg#info_area
 }
 
 #connections path {
-  fill: none;
-  stroke:url(#lineGrad);
-  stroke-width: 2;
-  stroke-dashoffset: 1000;
-  stroke-dasharray: 10;
-  animation: dash 50s linear infinite;
+    fill: none;
+    stroke:url(#lineGrad);
+    stroke-width: 2;
+    stroke-dashoffset: 1000;
+    stroke-dasharray: 10;
+    animation: dash 50s linear infinite;
 }
 
 @keyFrames dash

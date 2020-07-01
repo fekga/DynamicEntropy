@@ -129,6 +129,9 @@ Navigation(graphic_item=document['panel'], event_item=document['play_area'])
 # Initialize drawing thread
 timer.set_interval(drawing, 100)
 
+### MENU BAR ###
+# How to button
+howTo = HowToMenuItem(document["menu_btns"])
 # Hard reset button connection
 def hard_reset(event):
     for r in Resource.resources:
