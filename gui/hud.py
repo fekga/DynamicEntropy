@@ -1,7 +1,7 @@
 # hud.py
 from browser import document, svg, html
 from functools import partial
-
+from gui.ending import trigger_ending_scene
 
 class Hud:
     # Add g to the hud
@@ -40,6 +40,9 @@ class Hud:
     def hud_upgrade_buy(event, upgrade, node):
         if upgrade.buy():
             Hud.show_info(node)
+            # CHECK ENDING
+            if upgrade.name == "Dig down to ground-water":
+                trigger_ending_scene()
         event.stopPropagation()
 
     def create_converter_elements(title,elements,offset=0,boldTitle=False):

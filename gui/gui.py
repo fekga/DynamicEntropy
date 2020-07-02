@@ -153,4 +153,3 @@ dev_tick_check_box.bind("click", dev_tick)
 
 # Version - maybe later from git tag?
 document['content'] <= html.DIV('v1.0.0', id="version")
-
