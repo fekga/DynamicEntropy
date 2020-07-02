@@ -19,10 +19,20 @@ class HowToMenuItem:
         if self.content is None:
             text = "<h1>How to play</h1>"
             text += "<h2>Dynamic Entropy</h2>"
-            text += "This is how to write the tutorial. PLEASE WRITE ME.<br>"
-            text += "You can make new line like <br> See?<br>"
-            text += "Bold text like <strong>this</strong><br>"
-            text += "Make list like this:<ul><li>One</li><li>Two</li><li>Three</li></ul><br>"
+            text += "<br>"
+            text += "Right click nodes to start or stop them.<br>"
+            text += "Left click nodes to show or hide the information panel.<br>"
+            text += "Left click upgrades to buy them on the information panel of the nodes.<br>"
+            text += "Upgrades can be only bought when you have the required resources<br>"
+            text += "Hover over the resources on the side panel to highlight the nodes which need or create that resource.<br>"
+            text += "Drag the play are with left click to move it around.<br>"
+            text += "<br>"
+            text += "Nodes can only function if they have enough input resource.<br>"
+            text += "Nodes won't work if the output resource has reached it's maximum value.<br>"
+            text += "<br>"
+            text += "When nothing seems to work, try twiddling your thumbs to lose your Stamina and fall asleep.<br>"
+            text += "<br>"
+            text += "Good lcuk!<br>"
             self.content = create_front_blank_page(text) # already added to html
         self.show = True
 
