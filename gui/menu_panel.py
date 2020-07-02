@@ -42,7 +42,5 @@ class HowToMenuItem:
     def toggle_howToInfo(self):
         if self.show:
             self.hide_howToInfo()
-            print("hide")
         else:
             self.show_howToInfo()
-            print("show")
