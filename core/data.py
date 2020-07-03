@@ -18,9 +18,9 @@ cotton = Resource(name="Cotton", amount=0, max_amount=100)
 fabric = Resource(name="Fabric", amount=0, max_amount=50)
 wheat = Resource(name="Wheat", amount=0, max_amount=100)
 flour = Resource(name="Flour", amount=0, max_amount=100)
-bread = Resource(name="Bread", amount=0, max_amount=100)
+bread = Resource(name="Bread", amount=0, max_amount=50)
 iron_ore = Resource(name="Iron ore", amount=0, max_amount=100)
-iron = Resource(name="Iron", amount=0, max_amount=100)
+iron = Resource(name="Iron", amount=0, max_amount=50)
 tool = Resource(name="Tool", amount=0, max_amount=10)
 
 # Converters
@@ -301,6 +301,7 @@ Converter(name="Cotton field"
     ]
     ,makes=[
         cotton(amount=1),
+        seed(amount=0.1)
     ])
 Converter(name="Loom"
     ,needs=[
@@ -316,7 +317,8 @@ Converter(name="Wheat field"
         seed(amount=0,at_least=10),
     ]
     ,makes=[
-        wheat(amount=1)
+        wheat(amount=1),
+        seed(amount=0.1)
     ])
 Converter(name="Mill"
     ,needs=[
@@ -326,7 +328,7 @@ Converter(name="Mill"
     ,makes=[
         flour(amount=0.1),
     ])
-Converter(name="Bread furnace"
+baking = Converter(name="Baking"
     ,needs=[
         flour(amount=1),
         water(amount=0.3),
@@ -368,11 +370,25 @@ Upgrade(name="Build minecart",
             )
         ]
 )
+Upgrade(name="Well fed",
+        costs=[
+            Cost(resource=bread, amount=25)
+        ],
+        requires=[],
+        changes=[
+            iron_mine.change_by(
+                needs=[
+                    stamina(amount=1)
+                ],
+                makes=[iron_ore(.15)]
+            )
+        ]
+)
 
 Converter(name="Iron smelter"
     ,needs=[
         iron_ore(amount=1),
-        fire(amount=5)
+        fire(amount=5, at_least=30)
     ]
     ,makes=[
         iron(amount=.1)
@@ -380,7 +396,8 @@ Converter(name="Iron smelter"
 Converter(name="Tool maker"
     ,needs=[
         iron(amount=5),
-        fire(amount=1)
+        wood(amount=15),
+        fire(amount=1, at_least=30)
     ]
     ,makes=[
         tool(amount=1)
