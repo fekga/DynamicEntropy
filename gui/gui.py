@@ -152,4 +152,5 @@ def dev_tick(event):
 dev_tick_check_box.bind("click", dev_tick)
 
 # Version - maybe later from git tag?
-document['content'] <= html.DIV('v1.0.0', id="version")
+from core.app_version import version_label
+document['content'] <= html.DIV(version_label, id="version")
