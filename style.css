@@ -124,6 +124,7 @@ svg#info_area
     stroke-dashoffset: 1000;
     stroke-dasharray: 10;
     animation: dash 50s linear infinite;
+    transform: translateZ(0);
 }
 
 @keyFrames dash
