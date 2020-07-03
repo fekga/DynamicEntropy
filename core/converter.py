@@ -54,11 +54,14 @@ class Converter:
     def update(self):
         if self.state == Converter.STOPPED:
             return
+        ok = not self.makes
         for recipe in self.makes:
             resource = recipe.resource
-            if resource.amount >= resource.max_amount:
-                self.state = Converter.MAX_OUTPUT
-                return
+            if resource.amount < resource.max_amount:
+                ok = True
+        if not ok:
+            self.state = Converter.MAX_OUTPUT
+            return
         for recipe in self.needs:
             resource = recipe.resource
             if (not resource.can_take_recipe(recipe)):
