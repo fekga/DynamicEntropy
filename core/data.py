@@ -31,6 +31,17 @@ Converter(name="Wake up", unstoppable=True
     ,makes=[
         stamina(amount=stamina.max_amount)
     ])
+upgrade_final = Upgrade(name="Literally wake up...",
+        costs=[
+            Cost(resource=wood, amount=100),
+            Cost(resource=brick, amount=100),
+            Cost(resource=fabric, amount=50),
+            Cost(resource=bread, amount=50),
+            Cost(resource=tool, amount=10),
+        ],
+        requires=[],
+        changes=[]
+)
 sleep = Converter(name="Sleep", unstoppable=True
     ,needs=[
         stamina(at_most=.99, amount=0),
@@ -115,7 +126,7 @@ water_source = Converter(name="Water source"
     ,makes=[
         water(amount=1,at_least=0),
     ])
-water_upgrade_road = Upgrade(name="Built road",
+upgrade_waterRoad = Upgrade(name="Built road",
         costs=[
             Cost(resource=brick, amount=10)
         ],
@@ -129,7 +140,7 @@ water_upgrade_road = Upgrade(name="Built road",
             )
         ]
 )
-water_upgrade_hole = Upgrade(name="Dig down to ground-water",
+upgrade_waterHole = Upgrade(name="Dig down to ground-water",
         costs=[
             Cost(resource=stamina, amount=100)
         ],
@@ -145,12 +156,12 @@ water_upgrade_hole = Upgrade(name="Dig down to ground-water",
             )
         ]
 )
-Upgrade(name="Build well",
+upgrade_buildWell = Upgrade(name="Build well",
         costs=[
             Cost(resource=stamina, amount=50),
             Cost(resource=brick, amount=25)
         ],
-        requires=[ water_upgrade_road, water_upgrade_hole ],
+        requires=[ upgrade_waterRoad, upgrade_waterHole ],
         changes=[
             water_source.change_to(
                 needs=[
@@ -163,8 +174,23 @@ Upgrade(name="Build well",
             )
         ]
 )
+Upgrade(name="Use bucket",
+        costs=[
+            Cost(resource=tool, amount=1),
+            Cost(resource=wood, amount=15),
+        ],
+        requires=[ upgrade_buildWell ],
+        changes=[
+            water_source.change_by(
+                needs=[],
+                makes=[
+                    water(amount=1)
+                ],
+            )
+        ]
+)
 
-Converter(name="Forest"
+forest = Converter(name="Forest"
     ,needs=[
         water(amount=.1,at_least=0),
         plant(amount=1,at_least=50),
@@ -172,6 +198,24 @@ Converter(name="Forest"
     ,makes=[
         plant(amount=2,at_least=0),
     ])
+Upgrade(name="Dig a channel",
+        costs=[
+            Cost(resource=stamina, amount=25),
+            Cost(resource=tool, amount=2)
+        ],
+        requires=[],
+        changes=[
+            forest.change_by(
+                needs=[
+                    water(amount=.4)
+                ],
+                makes=[
+                    plant(amount=3)
+                ],
+            )
+        ]
+)
+
 wood_cutting = Converter(name="Wood cutting"
     ,needs=[
         plant(amount=5,at_least=0),
