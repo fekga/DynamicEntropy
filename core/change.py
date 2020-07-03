@@ -29,6 +29,8 @@ class Change:
             self.converter.changeName(self.converter_new_name)
 
     def __str__(self):
+        if not self.needs and not self.makes:
+            return ''
         text = f'{self.converter.name} will '
         s = []
         if self.converter_new_name:

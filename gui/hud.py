@@ -94,7 +94,8 @@ class Hud:
 
                 if upgrade.all_requirements_bought():
                     Hud.create_converter_elements('Costs:',upgrade.costs,offset=30)
-                    Hud.create_converter_elements('Changes:',upgrade.changes,offset=30)
+                    if upgrade is not upgrade_final:
+                        Hud.create_converter_elements('Changes:',upgrade.changes,offset=30)
                 else:
                     Hud.create_converter_elements('Requires:',upgrade.requires,offset=30)
 

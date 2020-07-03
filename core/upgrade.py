@@ -49,7 +49,15 @@ class Upgrade:
             requires += "]"
         changes = ""
         if self.changes:
-            changes = f"Changes: {list(map(str,self.changes))}"
+            has_change = False
+            for change in self.changes:
+                if len(change.needs) or len(change.makes):
+                    has_change = True
+
+            if has_change:
+                changes = f"Changes: {list(map(str,self.changes))}"
+            else:
+                changes = ''
         return f'{self.name}: {costs_str} {requires} {changes}'
 
     def __str__(self):
