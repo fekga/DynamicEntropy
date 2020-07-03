@@ -2,6 +2,7 @@
 from browser import document, svg, html
 from functools import partial
 from gui.ending import trigger_ending_scene
+from core.data import upgrade_final
 
 class Hud:
     # Add g to the hud
@@ -41,7 +42,7 @@ class Hud:
         if upgrade.buy():
             Hud.show_info(node)
             # CHECK ENDING
-            if upgrade.name == "Dig down to ground-water":
+            if upgrade is upgrade_final:
                 trigger_ending_scene()
         event.stopPropagation()
 
