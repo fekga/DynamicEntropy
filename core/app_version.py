@@ -1,1 +1,1 @@
-version_label = "v1.0.0"
+version_label = "v1.0.1"
