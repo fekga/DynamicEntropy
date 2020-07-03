@@ -24,7 +24,7 @@ iron = Resource(name="Iron", amount=0, max_amount=50)
 tool = Resource(name="Tool", amount=0, max_amount=10)
 
 # Converters
-Converter(name="Wake up", unstoppable=True
+wake_up = Converter(name="Wake up", unstoppable=True
     ,needs=[
         dreaming(amount=dreaming.max_amount, at_least=dreaming.max_amount),
     ]
@@ -40,7 +40,9 @@ upgrade_final = Upgrade(name="Literally wake up...",
             Cost(resource=tool, amount=10),
         ],
         requires=[],
-        changes=[]
+        changes=[
+            wake_up.change_by(needs=[],makes=[])
+        ]
 )
 sleep = Converter(name="Sleep", unstoppable=True
     ,needs=[
