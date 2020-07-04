@@ -8,11 +8,13 @@ from gui.info_panel import InfoPanelItem
 from gui.menu_panel import *
 from gui.navigation import Navigation
 from main import tick, tick_caller
+from gui.connections import *
 
 
 # Init nodes
 nodes = []
 panel = document['panel']
+
 sX, sY = 100,100
 deltaY = 0
 deltaX = 100
@@ -34,57 +36,19 @@ for conv in Converter.converters:
 
 
 ### Init connections ###
-g_line = svg.g(id="connections")
-panel <= g_line
-# Line gradient style
-defs = svg.defs()
-lg = svg.linearGradient(id="lineGrad",x1="0%", y1="0%", x2="100%", y2="0%")
-s1 = svg.stop(offset="0%")
-s1.attrs["style"] = "stop-color:rgb(255,0,0);stop-opacity:1"
-lg <= s1
-s2 = svg.stop(offset="100%")
-s2.attrs["style"] = "stop-color:rgb(0,255,0);stop-opacity:1"
-lg <= s2
-defs <= lg
-g_line <= defs
+
 # g_line.fill = "url(#lineGrad)"
 # Init connection structures
-for node in nodes:
-    for make in node.converter.makes:
-        for node_need in nodes:
-            for need in node_need.converter.needs:
-                if make.resource == need.resource:
-                    d="M 100 350 c 100 -200 200 500 300 0"
-                    line = svg.path(d=d)
-                    g_line <= line
-                    node.connections.append((line, node_need))
+refreshAllConnections(nodes)
 
-# Init node graphic
-for node in nodes:
-    panel <= node.circle
-    panel <= node.title
+
+
 
 # Drawings
 def draw_connections():
-    for node_out in nodes:
-        for connect_out in node_out.connections:
-            line, node_in = connect_out
-            x1, y1 = map(int,node_out.position)
-            x2, y2 = map(int,node_in.position)
-
-            mx1,my1 = int((x1+x2)/2),int(y1)
-            mx2,my2 = int((x1+x2)/2),int(y2)
-            d = f'M {x1} {y1} C {mx1} {my1} {mx2} {my2} {x2} {y2}'
-
-            line.attrs["d"] = d
-            if node_in.hidden or node_out.hidden:
-                line.attrs["visibility"] = "hidden"
-            else:
-                line.attrs["visibility"] = "visible"
-                if node_in.converter.state == Converter.OK:
-                    line.attrs["opacity"] = "1.0"
-                else:
-                    line.attrs["opacity"] = "0.2"
+    for node in nodes:
+        for connection in node.connections:
+            connection.drawConnection()
 
 
 def draw_nodes():

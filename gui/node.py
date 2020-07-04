@@ -1,5 +1,5 @@
 # node.py
-from browser import svg
+from browser import svg, document
 from core.converter import Converter
 import gui.hud as hud
 
@@ -20,6 +20,10 @@ class Node:
         self.connections = []
         self.hide_all()
         self.upgradable = False
+        # Add to html
+        nodes_g = document['nodes']
+        nodes_g <= self.circle
+        nodes_g <= self.title
 
     def highlight_node(self, color):
         self.circle.attrs['stroke'] = color

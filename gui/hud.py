@@ -6,8 +6,7 @@ from core.data import upgrade_final
 
 class Hud:
     # Add g to the hud
-    panel = svg.g(id='hud')
-    document['panel'] <= panel
+    panel = document['hud']
     rect = panel.parent.getBoundingClientRect()
     width,height = rect.width,rect.height
     hud_info = svg.text("", x=0, y=0, font_size=20,text_anchor="start")
