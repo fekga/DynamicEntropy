@@ -1,7 +1,7 @@
 # menu_panel.py
 from browser import svg, document, html
 from core.time_measurement import TimeMeasurment
-from gui.front_page import create_front_blank_page
+from gui.front_page import *
 
 def update_menu_panel():
     document['timer'].text = "Playtime: " + TimeMeasurment.printElapsedTime()
@@ -37,7 +37,7 @@ class HowToMenuItem:
         self.show = True
 
     def hide_howToInfo(self):
-        self.content.remove()
+        remove_front_page(self.content)
         self.content = None
         self.show = False
 

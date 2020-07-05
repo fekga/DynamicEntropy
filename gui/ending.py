@@ -1,6 +1,6 @@
 # ending.py
 from browser import document, html
-from gui.front_page import create_front_blank_page
+from gui.front_page import *
 
 # Call for final scene
 def trigger_ending_scene():
@@ -24,5 +24,5 @@ def trigger_ending_scene():
     content <= html.BR()
 
     btn = html.BUTTON("Thanks for playing")
-    btn.bind("click", lambda e, content=content: content.remove())
+    btn.bind("click", lambda e, content=content: remove_front_page(content))
     content <= btn

@@ -2,7 +2,7 @@
 from browser import document, svg, html
 from functools import partial
 from gui.ending import trigger_ending_scene
-from core.data import upgrade_final
+from core.data import upgrade_final, upgrade_waterHole
 
 class Hud:
     # Add g to the hud

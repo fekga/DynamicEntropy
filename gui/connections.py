@@ -83,12 +83,10 @@ class Connection:
         return False
 
 def refreshAllConnections(nodes):
-    print("refresh all")
     for node in nodes:
         refreshConnections(node, nodes)
 
 def refreshConnections(node, nodes):
-    print("refresh " , node.converter.name)
     node.connections.clear()  # reset
     for node_need in nodes:
         if Connection.createConnection(node, node_need):
