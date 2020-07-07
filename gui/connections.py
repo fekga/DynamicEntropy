@@ -3,10 +3,12 @@ from browser import svg, document
 from core.converter import Converter
 
 class Connection:
-    def __init__(self, node_make, node_need):
+    def __init__(self, node_make, node_need, resource):
         self.node_make = node_make
         self.node_need = node_need
+        self.resource = resource
         self.lineCreation()
+        self.manual_property_set = False
 
     def __del__(self):
         self.line.remove()
@@ -70,17 +72,25 @@ class Connection:
         else:
             self.line.attrs["visibility"] = "visible"
             if self.node_make.converter.state == Converter.OK:
-                self.line.attrs["opacity"] = "1.0"
+                self.drawConnectionAsActive()
             else:
-                self.line.attrs["opacity"] = "0.2"
+                self.drawConnectionAsInactive()
+
+    def drawConnectionAsActive(self, forced=False):
+        if not self.manual_property_set or forced:
+            self.line.attrs["opacity"] = "1.0"
+
+    def drawConnectionAsInactive(self, forced=False):
+        if not self.manual_property_set or forced:
+            self.line.attrs["opacity"] = "0.2"
 
     def createConnection(node_out, node_in):
         if node_out is not node_in:
             for make in node_out.converter.makes:
                 for need in node_in.converter.needs:
                     if make.resource == need.resource:
-                        return True
-        return False
+                        return True, make.resource
+        return False, None
 
 def refreshAllConnections(nodes):
     for node in nodes:
@@ -89,8 +99,9 @@ def refreshAllConnections(nodes):
 def refreshConnections(node, nodes):
     node.connections.clear()  # reset
     for node_need in nodes:
-        if Connection.createConnection(node, node_need):
-            connection = Connection(node, node_need)
+        create, resource = Connection.createConnection(node, node_need)
+        if create:
+            connection = Connection(node, node_need, resource)
             node.connections.append(connection)
 
 

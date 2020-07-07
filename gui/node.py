@@ -20,19 +20,22 @@ class Node:
         self.connections = []
         self.hide_all()
         self.upgradable = False
+        self.manual_property_set = False
         # Add to html
         nodes_g = document['nodes']
         nodes_g <= self.circle
         nodes_g <= self.title
 
-    def highlight_node(self, color):
-        self.circle.attrs['stroke'] = color
+    def highlight_node(self, color, forced=False):
+        if not self.manual_property_set or forced:
+            self.circle.attrs['stroke'] = color
 
-    def remove_highlight_node(self):
-        color = "black"
-        if self.converter.has_upgrade():
-            color = "darkblue"
-        self.circle.attrs['stroke'] = color
+    def remove_highlight_node(self, forced=False):
+        if not self.manual_property_set or forced:
+            color = "black"
+            if self.converter.has_upgrade():
+                color = "darkblue"
+            self.circle.attrs['stroke'] = color
 
     def clicked(self, event):
         hud.Hud.active = True

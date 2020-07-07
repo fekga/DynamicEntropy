@@ -44,14 +44,23 @@ class InfoPanelItem:
         g <= self.rect
         g <= svg.use(href="#"+clip_id_str)
 
+        self.border = svg.rect(id="itemContainer_rect",
+                               x=0, y=line_pos * line_height,
+                               width=window_width, height=line_height,
+                               rx=rect_rx, fill="grey",
+                               style={"fill-opacity":"0.5"}
+                               )
+        self.border.attrs['visibility'] = 'hidden'
+        info_panel <= self.border
+
         # SVG elements
         info_panel <= clip
         info_panel <= g
         info_panel <= self.text
         info_panel <= self.number_text
 
-        self.text.bind("mouseover", lambda ev, nodes=nodes: self.highlight_connections(nodes))
-        self.text.bind("mouseout", lambda ev, nodes=nodes: self.remove_highlight_connections(nodes))
+        self.text.bind("mouseover", lambda ev: self.highlight_connections(nodes))
+        self.text.bind("mouseout", lambda ev: self.remove_highlight_connections(nodes))
 
     def draw(self):
         max_amount = self.resource.max_amount
@@ -70,8 +79,19 @@ class InfoPanelItem:
             self.rect.attrs["fill"] = f"rgb({r},{g},0)"
             self.number_text.text = f"{int(amount)} / {int(max_amount)}"
 
+    def highlight_item(self):
+        self.border.attrs['visibility'] = 'visible'
+
+    def highlight_item_remove(self):
+        self.border.attrs['visibility'] = 'hidden'
+
     def highlight_connections(self, nodes):
+        self.highlight_item()
+
         for node in nodes:
+            # Nodes to manual property set
+            node.manual_property_set = True
+
             needed = False
             for need in node.converter.needs:
                 if need.resource == self.resource and need.amount > 0:
@@ -81,12 +101,31 @@ class InfoPanelItem:
                 if make.resource == self.resource and make.amount > 0:
                     makes = True
             if needed and makes:
-                node.highlight_node("yellow")
+                node.highlight_node(color="yellow", forced=True)
             elif needed:
-                node.highlight_node("red")
+                node.highlight_node(color="red", forced=True)
             elif makes:
-                node.highlight_node("lightgreen")
+                node.highlight_node(color="lightgreen", forced=True)
+            else:
+                node.remove_highlight_node(forced=True)
+
+            # Connection
+            for connection in node.connections:
+                connection.manual_property_set = True
+                if self.resource == connection.resource:
+                    connection.drawConnectionAsActive(forced=True)
+                else:
+                    connection.drawConnectionAsInactive(forced=True)
 
     def remove_highlight_connections(self, nodes):
+        self.highlight_item_remove()
+
         for node in nodes:
+            # Nodes to automatic property set
+            node.manual_property_set = False
+
             node.remove_highlight_node()
+
+            # Connection
+            for connection in node.connections:
+                connection.manual_property_set = False

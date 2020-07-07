@@ -36,12 +36,8 @@ for conv in Converter.converters:
 
 
 ### Init connections ###
-
-# g_line.fill = "url(#lineGrad)"
 # Init connection structures
 refreshAllConnections(nodes)
-
-
 
 
 # Drawings
@@ -70,7 +66,7 @@ def drawing():
 
 
 # Init resource texts
-info_panel_items=[]
+info_panel_items = []
 for idx, res in enumerate(Resource.resources):
     info_panel_items.append(InfoPanelItem(res, idx, nodes))
 
@@ -80,7 +76,7 @@ drawing()
 # Init HUD
 hud.Hud.clear_hud()
 panel <= svg.use(href="#hud")
-document["hud"].bind('click',hud.Hud.hud_clicked)
+document["hud"].bind('click', hud.Hud.hud_clicked)
 # HUD clear event
 def panel_click(event):
     hud.Hud.active = False
