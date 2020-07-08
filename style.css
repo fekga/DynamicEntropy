@@ -117,13 +117,17 @@ svg#info_area
     transform: translate(-50%, -50%);
 }
 
-#connections path {
+#connections .flow {
     fill: none;
     stroke-width: 2;
     stroke-dashoffset: 1000;
     stroke-dasharray: 10;
     animation: dash 50s linear infinite;
-
+}
+#connections .catalyst {
+    fill: none;
+    stroke-width: 1;
+    opacity: 0.2;
 }
 
 @keyFrames dash

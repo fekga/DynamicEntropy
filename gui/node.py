@@ -9,7 +9,7 @@ class Node:
     def __init__(self, converter, pos):
         self.converter = converter
         self.position = pos
-        self.circle = svg.circle(cx=0, cy=0, r=self.radius,stroke="black",stroke_width="4",fill="green")
+        self.circle = svg.circle(cx=0, cy=0, r=self.radius, stroke="black",stroke_width="4",fill="green")
         self.circle.attrs["id"] = self.converter.name
         self.title = svg.text(self.converter.name, x=0, y=self.radius + 15, z=10, font_size=15, text_anchor="middle")
         x,y = self.position
@@ -20,19 +20,22 @@ class Node:
         self.connections = []
         self.hide_all()
         self.upgradable = False
+        self.manual_property_set = False
         # Add to html
         nodes_g = document['nodes']
         nodes_g <= self.circle
         nodes_g <= self.title
 
-    def highlight_node(self, color):
-        self.circle.attrs['stroke'] = color
+    def highlight_node(self, color, forced=False):
+        if not self.manual_property_set or forced:
+            self.circle.attrs['stroke'] = color
 
-    def remove_highlight_node(self):
-        color = "black"
-        if self.converter.has_upgrade():
-            color = "darkblue"
-        self.circle.attrs['stroke'] = color
+    def remove_highlight_node(self, forced=False):
+        if not self.manual_property_set or forced:
+            color = "black"
+            if self.converter.has_upgrade():
+                color = "darkblue"
+            self.circle.attrs['stroke'] = color
 
     def clicked(self, event):
         hud.Hud.active = True
@@ -72,7 +75,7 @@ class Node:
             self.position = cx, cy
             state = self.converter.state
             if state == Converter.OK:
-                color = "green"
+                color = "lightgreen"
             elif state == Converter.STOPPED:
                 color = "gray"
             elif state == Converter.NO_INPUT:
