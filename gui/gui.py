@@ -84,7 +84,7 @@ def panel_click(event):
 document["play_area"].bind('click',panel_click)
 
 # Create navigation
-Navigation(graphic_item=document['panel'], event_item=document['play_area'])
+Navigation(svg_item=document['play_area'])
 
 # Initialize drawing thread
 timer.set_interval(drawing, 100)
