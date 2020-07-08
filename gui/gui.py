@@ -7,7 +7,6 @@ import gui.hud as hud
 from gui.info_panel import InfoPanelItem
 from gui.menu_panel import *
 from gui.navigation import Navigation
-from main import tick, tick_caller
 from gui.connections import *
 
 
@@ -99,17 +98,6 @@ def hard_reset(event):
     for c in Converter.converters:
         c.running = False
 document["reset"].bind("click", hard_reset)
-
-# Dev tick checkbox connection
-dev_tick_check_box = document["dev_tick_checkbox"]
-def dev_tick(event):
-    global tick_caller
-    timer.clear_interval(tick_caller)
-    if event.target.checked:
-        tick_caller = timer.set_interval(tick, 50)
-    else:
-        tick_caller = timer.set_interval(tick, 500)
-dev_tick_check_box.bind("click", dev_tick)
 
 # Version - maybe later from git tag?
 from core.app_version import version_label

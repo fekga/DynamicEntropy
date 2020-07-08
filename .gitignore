@@ -1,3 +1,5 @@
+.gitignore
+
 venv/
 
 .idea/
@@ -5,3 +7,4 @@ venv/
 *__pycache__*
 /**/__pycache__/
 *.py[cod]
+*/brython_modules.js
