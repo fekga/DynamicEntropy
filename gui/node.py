@@ -75,7 +75,7 @@ class Node:
             self.position = cx, cy
             state = self.converter.state
             if state == Converter.OK:
-                color = "green"
+                color = "lightgreen"
             elif state == Converter.STOPPED:
                 color = "gray"
             elif state == Converter.NO_INPUT:

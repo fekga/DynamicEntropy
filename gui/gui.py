@@ -17,7 +17,7 @@ panel = document['panel']
 
 sX, sY = 100,100
 deltaY = 0
-deltaX = 100
+deltaX = 200
 maxCol = 5
 actCol = 0
 X = sX
@@ -27,7 +27,7 @@ for conv in Converter.converters:
     nodes.append(node)
     X += deltaX
     actCol += 1
-    Y += 20
+    Y += 40
     if actCol == maxCol:
         sX += 10
         X = sX
