@@ -34,6 +34,8 @@ class Converter:
         return self.state == Converter.STOPPED
 
     def stay_hidden(self):
+        if self.unstoppable:
+            return False
         if self.needs is not None:
             for recipe in self.needs:
                 if recipe.resource.amount <= 0 and recipe.amount != 0:
