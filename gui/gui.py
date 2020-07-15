@@ -97,6 +97,6 @@ def hard_reset(event):
         c.running = False
 document["reset"].bind("click", hard_reset)
 
-# Version - maybe later from git tag?
+# Version
 from core.app_version import version_label
 document['content'] <= html.DIV(version_label, id="version")
