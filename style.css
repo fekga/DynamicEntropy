@@ -117,27 +117,6 @@ svg#info_area
     transform: translate(-50%, -50%);
 }
 
-#connections .flow {
-    fill: none;
-    stroke-width: 2;
-    stroke-dashoffset: 1000;
-    stroke-dasharray: 10;
-    animation: dash 50s linear infinite;
-}
-#connections .catalyst {
-    fill: none;
-    stroke-width: 1;
-    opacity: 0.2;
-}
-
-@keyFrames dash
-{
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-
 svg {
     dominant-baseline: hanging;
     transform: translateZ(0);
@@ -175,19 +154,60 @@ svg {
   }
 }
 
-
+/* FRONT PAGE */
 .appear {
-    animation: fadein 0.5s ease-out;
+    animation: frontPage_fadein 0.5s ease-out;
 }
 .disappear {
-    animation: fadeout 0.5s ease-out;
+    animation: frontPage_fadeout 0.5s ease-out;
 }
-
-@keyframes fadein {
+@keyframes frontPage_fadein {
     0% { opacity: 0; }
     100% { opacity: 1; }
 }
-@keyframes fadeout {
+@keyframes frontPage_fadeout {
     0% { opacity: 1; }
     100% { opacity: 0; }
+}
+
+/* CONNECTIONS */
+#connections #flow {
+    fill: none;
+    stroke-width: 2;
+    stroke-dashoffset: 1000;
+    stroke-dasharray: 10;
+}
+@keyFrames dash
+{
+  to { stroke-dashoffset: 0; }
+}
+#connections #flow.active {
+    animation: connection_activate 0.1s linear, dash 50s linear infinite;
+    opacity: 1;
+}
+#connections #flow.inactive {
+    animation: connection_deactivate 0.1s linear, dash 50s linear infinite;
+    opacity: 0.1;
+}
+@keyframes connection_activate {
+    0% { opacity: 0.1; }
+    100% { opacity: 1; }
+}
+@keyframes connection_deactivate {
+    0% { opacity: 1; }
+    100% { opacity: 0.1; }
+}
+
+#connections #catalyst {
+    fill: none;
+    stroke-width: 1;
+    opacity: 0.2;
+}
+#connections #catalyst.active {
+    animation: connection_activate 0.1s linear;
+    opacity: 0.5;
+}
+#connections #catalyst.inactive {
+    animation: connection_deactivate 0.1s linear;
+    opacity: 0.1;
 }

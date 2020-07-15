@@ -74,7 +74,7 @@ class Connection:
         self.line.attrs['stroke'] = f'url(#{lineGradID})'
         document['connections'] <= self.defs
         # Set path html class
-        self.line.attrs['class'] = "flow"
+        self.line.attrs['id'] = "flow"
 
         document['connections'] <= self.line
 
@@ -93,11 +93,11 @@ class Connection:
 
     def drawConnectionAsActive(self, forced=False):
         if not self.manual_property_set or forced:
-            self.line.attrs["opacity"] = "1.0"
+            self.line.attrs["class"] = "active"
 
     def drawConnectionAsInactive(self, forced=False):
         if not self.manual_property_set or forced:
-            self.line.attrs["opacity"] = "0.2"
+            self.line.attrs["class"] = "inactive"
 
     def createConnection(node_out, node_in):
         if node_out is not node_in:
@@ -122,9 +122,13 @@ class Connection_catalyst(Connection):
     def lineCreation(self):
         # SVG path calculation
         self.line = Connection.pathCreation(self.node_make.position, self.node_need.position)
-
-        # Set path html class
-        self.line.attrs['class'] = "catalyst"
+        # SVG lineGradient calculation
+        lineGradID = f'lineGrad_{id(self)}'
+        self.defs = Connection.defsCreation(lineGradID, self.node_make.position, self.node_need.position)
+        self.line.attrs['stroke'] = f'url(#{lineGradID})'
+        document['connections'] <= self.defs
+        # Set path html id
+        self.line.attrs['id'] = "catalyst"
 
         document['connections'] <= self.line
 
@@ -134,11 +138,11 @@ class Connection_catalyst(Connection):
 
     def drawConnectionAsActive(self, forced=False):
         if not self.manual_property_set or forced:
-            self.line.attrs["stroke"] = "green"
+            self.line.attrs["class"] = "active"
 
     def drawConnectionAsInactive(self, forced=False):
         if not self.manual_property_set or forced:
-            self.line.attrs["stroke"] = "red"
+            self.line.attrs["class"] = "inactive"
 
 ############## FUNCTIONS ##############
 def refreshAllConnections(nodes):
