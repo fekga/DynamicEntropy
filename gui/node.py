@@ -3,13 +3,14 @@ from browser import svg, document
 from core.converter import Converter
 import gui.hud as hud
 
+
 class Node:
     radius = 20
 
     def __init__(self, converter, pos):
         self.converter = converter
         self.position = pos
-        self.circle = svg.circle(cx=0, cy=0, r=self.radius, stroke="black",stroke_width="4",fill="green")
+        self.circle = svg.circle(cx=0, cy=0, r=self.radius, stroke="black", stroke_width="4")
         self.circle.attrs["id"] = self.converter.name
         self.title = svg.text(self.converter.name, x=0, y=self.radius + 15, z=10, font_size=15, text_anchor="middle")
         x,y = self.position
@@ -21,6 +22,7 @@ class Node:
         self.hide_all()
         self.upgradable = False
         self.manual_property_set = False
+        self.lastState = "unknown"
         # Add to html
         nodes_g = document['nodes']
         nodes_g <= self.circle
@@ -74,17 +76,27 @@ class Node:
             self.title.attrs["y"] = cy - self.radius - 15
             self.position = cx, cy
             state = self.converter.state
-            if state == Converter.OK:
-                color = "lightgreen"
-            elif state == Converter.STOPPED:
-                color = "gray"
-            elif state == Converter.NO_INPUT:
-                color = "yellow"
-            elif state == Converter.MAX_OUTPUT:
-                color = "darkgreen"
-            else:
-                color = "blue" # error
-            self.circle.attrs["fill"] = color
+            if self.lastState != state:
+                self.lastState = state
+                if state == Converter.OK:
+                    color = "lightgreen"
+                elif state == Converter.STOPPED:
+                    color = "gray"
+                elif state == Converter.NO_INPUT:
+                    color = "yellow"
+                elif state == Converter.MAX_OUTPUT:
+                    color = "darkgreen"
+                else:
+                    color = "blue" # error
+                # Do animation
+                self.circle.clear()
+                lastColor = self.circle.attrs["fill"]
+                animValues = f'{lastColor};{color}'
+                anim = svg.animate(attributeName="fill", values=animValues, dur="0.1s", repeatCount=1)
+                self.circle <= anim
+                anim.beginElement()
+                self.circle.attrs["fill"] = color
+
             # Check upgrade are available
             upgradable_current = self.converter.has_buyable_upgrade()
             if upgradable_current and not self.upgradable:
