@@ -10,7 +10,7 @@ class Node:
     def __init__(self, converter, pos):
         self.converter = converter
         self.position = pos
-        self.circle = svg.circle(cx=0, cy=0, r=self.radius, stroke="black", stroke_width="4")
+        self.circle = svg.circle(cx=0, cy=0, r=self.radius, stroke="black", stroke_width="4", fill="black")
         self.circle.attrs["id"] = self.converter.name
         self.title = svg.text(self.converter.name, x=0, y=self.radius + 15, z=10, font_size=15, text_anchor="middle")
         x,y = self.position
