@@ -12,7 +12,6 @@ from gui.connections import *
 
 # Init nodes
 nodes = []
-panel = document['panel']
 
 sX, sY = 100,100
 deltaY = 0
@@ -74,7 +73,6 @@ drawing()
 
 # Init HUD
 hud.Hud.clear_hud()
-panel <= svg.use(href="#hud")
 document["hud"].bind('click', hud.Hud.hud_clicked)
 # HUD clear event
 def panel_click(event):
