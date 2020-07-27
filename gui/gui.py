@@ -4,7 +4,7 @@ from core.resource import Resource
 from core.converter import Converter
 from gui.node import Node
 import gui.hud as hud
-from gui.info_panel import InfoPanelItem
+from gui.info_panel import InfoPanel
 from gui.menu_panel import *
 from gui.navigation import Navigation
 from gui.connections import *
@@ -51,8 +51,8 @@ def draw_nodes():
         node.draw()
 
 def draw_resources():
-    for info_panel_item in info_panel_items:
-        info_panel_item.draw()
+    info_panel.draw()
+
 
 
 def drawing():
@@ -64,9 +64,7 @@ def drawing():
 
 
 # Init resource texts
-info_panel_items = []
-for idx, res in enumerate(Resource.resources):
-    info_panel_items.append(InfoPanelItem(res, idx, nodes))
+info_panel = InfoPanel(resources=Resource.resources, nodes=nodes)
 
 # Init GUI
 drawing()

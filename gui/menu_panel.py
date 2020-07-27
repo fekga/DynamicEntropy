@@ -32,6 +32,8 @@ class HowToMenuItem:
             text += "<br>"
             text += "When nothing seems to work, try twiddling your thumbs to lose your Stamina and fall asleep.<br>"
             text += "<br>"
+            text += "Goal: Buy the upgrade in the 'Wake up' node and have fun.<br>"
+            text += "<br>"
             text += "Good luck!<br>"
             self.content = create_front_blank_page(text) # already added to html
         self.show = True
