@@ -4,6 +4,7 @@ from browser import svg, document
 class InfoPanelItem:
     def __init__(self, resource, line_pos, nodes):
         info_panel = document['info_panel']
+        self.graphic_container = svg.g()
         self.resource = resource
         self.line_pos = line_pos
         line_height = 25
@@ -51,18 +52,35 @@ class InfoPanelItem:
                                style={"fill-opacity":"0.5"}
                                )
         self.border.attrs['visibility'] = 'hidden'
-        info_panel <= self.border
+        self.graphic_container <= self.border
 
         # SVG elements
-        info_panel <= clip
-        info_panel <= g
-        info_panel <= self.text
-        info_panel <= self.number_text
+        self.graphic_container <= clip
+        self.graphic_container <= g
+        self.graphic_container <= self.text
+        self.graphic_container <= self.number_text
+
+        info_panel <= self.graphic_container
+        self.graphic_container.attrs['visibility'] = 'hidden'
 
         self.text.bind("mouseover", lambda ev: self.highlight_connections(nodes))
         self.text.bind("mouseout", lambda ev: self.remove_highlight_connections(nodes))
 
+        # Visible
+        self.hidden = True
+
+    def stay_hidden(self, all_nodes):
+        for node in all_nodes:
+            if not node.hidden:
+                for node_make in node.converter.makes:
+                    if node_make.resource == self.resource:
+                        return False
+        return True
+
     def draw(self):
+        if self.hidden:
+            return
+        self.graphic_container.attrs['visibility'] = 'visible'
         max_amount = self.resource.max_amount
         if max_amount != 0:
             amount = self.resource.amount

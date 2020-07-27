@@ -52,6 +52,8 @@ def draw_nodes():
 
 def draw_resources():
     for info_panel_item in info_panel_items:
+        if info_panel_item.hidden:
+            info_panel_item.hidden = info_panel_item.stay_hidden(nodes)
         info_panel_item.draw()
 
 
