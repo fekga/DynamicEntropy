@@ -3,8 +3,11 @@ from browser import svg, document, html
 from core.time_measurement import TimeMeasurment
 from gui.front_page import *
 
+playtimeMeasurement = TimeMeasurment()
+autosaveMeasurement = TimeMeasurment()
 def update_menu_panel():
-    document['timer'].text = "Playtime: " + TimeMeasurment.printElapsedTime()
+    document['timer'].text = "Playtime: " + playtimeMeasurement.printElapsedTime()
+    document['autosave'].text = "Autosave in " + autosaveMeasurement.printRemainingTime(60, document['save']) + "s "
 
 class HowToMenuItem:
     def __init__(self, whereToPut):

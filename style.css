@@ -57,7 +57,7 @@ svg#info_area
     top:0;
 }
 #menu_bar_items_right_aligned {
-    display: block;
+    display: inline-flex;
     position: absolute;
     top: 15px;
     right:0;

@@ -1,5 +1,6 @@
 # gui.py
 from browser import document, svg, html, timer
+from browser.local_storage import storage
 from core.resource import Resource
 from core.converter import Converter
 from gui.node import Node
@@ -84,6 +85,10 @@ Navigation(svg_item=document['play_area'])
 # Initialize drawing thread
 timer.set_interval(drawing, 100)
 
+# Version
+from core.app_version import version_label
+document['content'] <= html.DIV(version_label, id="version")
+
 ### MENU BAR ###
 # How to button
 howTo = HowToMenuItem(document["menu_btns"])
@@ -93,8 +98,30 @@ def hard_reset(event):
         r.amount = 0
     for c in Converter.converters:
         c.running = False
+    storage['state'] = "" # full reset
 document["reset"].bind("click", hard_reset)
+# Save button
+def save_state(event):
+    fullString = version_label + "|"
+    for resource in Resource.resources:
+        fullString += f'{resource.name}:{resource.amount}|'
+    storage['state'] = fullString
+document["save"].bind("click", save_state)
 
-# Version
-from core.app_version import version_label
-document['content'] <= html.DIV(version_label, id="version")
+def load_last_save(event):
+    try:
+        fullString = storage['state']
+        print(fullString, fullString.startswith(version_label))
+        resources = fullString.split("|")
+        # Version check
+        for idx, resource in enumerate(Resource.resources):
+            name, amount = resources[idx+1].split(":") # +1 the version
+            if resource.name != name:
+                return
+            else:
+                resource.amount = float(amount)
+    except:
+        pass # local save not exists yet
+load_last_save(None) # Try to load local file
+
+
