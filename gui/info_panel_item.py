@@ -59,9 +59,6 @@ class InfoPanelItem:
 
         self.graphic_container.attrs['visibility'] = 'hidden'
 
-        self.text.bind("mouseover", lambda ev: self.highlight_connections(nodes))
-        self.text.bind("mouseout", lambda ev: self.remove_highlight_connections(nodes))
-
         # Visible
         self.hidden = True
 

@@ -16,6 +16,8 @@ class InfoPanel:
         self.items = []
         for idx, res in enumerate(resources):
             item = InfoPanelItem(resource=res, line_height=item_height, line_width=window_width)
+            item.graphic_container.bind("mouseover", lambda ev, item=item: item.highlight_connections(self.all_nodes))
+            item.graphic_container.bind("mouseout", lambda ev, item=item: item.remove_highlight_connections(self.all_nodes))
             self.info_panel <= item.graphic_container
             self.items.append(item)
 
