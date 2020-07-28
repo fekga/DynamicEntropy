@@ -1,7 +1,6 @@
 from core.resource import Resource
 from core.converter import Converter
 from core.upgrade import Upgrade, Cost
-from core.change import Change
 
 # Resources
 stamina = Resource(name="Stamina",amount=100,max_amount=100)

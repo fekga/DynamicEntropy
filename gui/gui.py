@@ -1,17 +1,20 @@
 # gui.py
+from typing import List
+
 from browser import document, svg, html, timer
-from core.resource import Resource
-from core.converter import Converter
+from core.resource import *
 from gui.node import Node
 import gui.hud as hud
 from gui.info_panel import InfoPanel
 from gui.menu_panel import *
 from gui.navigation import Navigation
 from gui.connections import *
+from core.app_version import version_label
+from core.save_load_game import SaveLoadGame
 
 
 # Init nodes
-nodes = []
+nodes: List[Node] = []
 
 sX, sY = 100,100
 deltaY = 0
@@ -84,17 +87,18 @@ Navigation(svg_item=document['play_area'])
 # Initialize drawing thread
 timer.set_interval(drawing, 100)
 
+# Version
+document['content'] <= html.DIV(version_label, id="version")
+
+### Save/load game
+save_load_game = SaveLoadGame(converters=Converter.converters, resources=Resource.resources)
+
 ### MENU BAR ###
 # How to button
 howTo = HowToMenuItem(document["menu_btns"])
-# Hard reset button connection
-def hard_reset(event):
-    for r in Resource.resources:
-        r.amount = 0
-    for c in Converter.converters:
-        c.running = False
-document["reset"].bind("click", hard_reset)
+# Reset button
+document["reset"].bind("click", lambda e: save_load_game.reset_game())
+# Save button
+document["save"].bind("click", lambda e: save_load_game.save_game())
+save_load_game.load_game() # Try to load local file
 
-# Version
-from core.app_version import version_label
-document['content'] <= html.DIV(version_label, id="version")
