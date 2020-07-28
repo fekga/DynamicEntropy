@@ -3,6 +3,7 @@ from dataclasses import dataclass, field
 from typing import List, Type
 from core.change import Change
 from core.resource import Resource
+from core.save_load_game import SaveLoadGame
 
 empty = lambda: field(default_factory=list)
 
@@ -85,7 +86,12 @@ class Upgrade:
             return False
         for cost in self.costs:
             cost.resource.take(cost.amount)
+        self.apply_changes()
+        return True
+
+    def apply_changes(self):
         for change in self.changes:
             change.apply()
         self.bought = True
-        return True
+        # NOTE: we have to store the upgrade buy sequence
+        SaveLoadGame.bought_upgrades.append(self.name)

@@ -44,3 +44,5 @@ class Resource:
     def __call__(self, amount=0,at_least=0,at_most=float('inf')):
         ''' Creates recipe '''
         return Recipe(self,amount,at_least,at_most)
+
+
