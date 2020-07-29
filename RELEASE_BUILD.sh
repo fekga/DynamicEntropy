@@ -13,7 +13,7 @@ if [ $versionTag ]; then
         echo "*******************WARNING*******************"
         echo "*********************************************"
         echo "ALL OF YOUR NOT COMMITED CHANGES WILL BE LOST!"
-        echo "MAKE SURE YOU DON\'T HAVE ANY IMPORTANT CHANGES!"
+        echo "MAKE SURE YOU DO NOT HAVE ANY IMPORTANT CHANGES!"
         echo "Changed and not commited files:"
         git diff --name-status
         read -p "Are you sure theye are not important? (y/n)" -n 1 -r
