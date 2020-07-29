@@ -4,17 +4,20 @@ from browser.local_storage import storage
 # from browser.widgets.dialog import InfoDialog
 from core.app_version import version_label
 from core.resource import *
+import time
 
 class SaveLoadGame:
     bought_upgrades = [] # time sequence of upgrades
 
-    def __init__(self, converters, resources):
+    def __init__(self, converters, resources, playtimeMeasurement):
         self.converters = converters
         self.resources = resources
+        self.playtimeMeasurement = playtimeMeasurement
 
         self.save_version_key = "save_version"
         self.save_resources_key = "save_resources"
         self.save_updrages_key = "save_upgrades"
+        self.save_playtime_key = "save_playtime"
 
 
     def reset_game(self):
@@ -23,6 +26,7 @@ class SaveLoadGame:
         del storage[self.save_version_key]
         del storage[self.save_resources_key]
         del storage[self.save_updrages_key]
+        del storage[self.save_playtime_key]
         # HACK: reload page from HTML button
 
 
@@ -46,16 +50,21 @@ class SaveLoadGame:
             upgradesString = "|".join(bought_upgrades)
         else:
             upgradesString = ""
+
+        # Playtime
+        playtimeString = str(int(self.playtimeMeasurement.getElapsedSeconds()))
+
         storage[self.save_version_key] = versionString
         storage[self.save_resources_key] = resourcesString
         storage[self.save_updrages_key] = upgradesString
+        storage[self.save_playtime_key] = playtimeString
 
 
     def load_game(self):
         try:
-            versionString = storage['save_version']
-            resourcesString = storage['save_resources']
-            upgradesString = storage['save_upgrades']
+            versionString = storage[self.save_version_key]
+            resourcesString = storage[self.save_resources_key]
+            upgradesString = storage[self.save_updrages_key]
 
             # Version warning
             if versionString != version_label:
@@ -79,6 +88,11 @@ class SaveLoadGame:
                     for upg in converter.upgrades:
                         if upg.name == bought_upgrade:
                             upg.apply_changes() # set the SaveLoadGame.bought_upgrades automatically
+
+            ## Playtime
+            playtimeString = storage[self.save_playtime_key]
+            self.playtimeMeasurement.start_time = time.time() - int(playtimeString)
+
         except:
             # print("Load failed")  # local save not exists yet
             pass

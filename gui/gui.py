@@ -91,7 +91,10 @@ timer.set_interval(drawing, 100)
 document['content'] <= html.DIV(version_label, id="version")
 
 ### Save/load game
-save_load_game = SaveLoadGame(converters=Converter.converters, resources=Resource.resources)
+save_load_game = SaveLoadGame(
+    converters=Converter.converters,
+    resources=Resource.resources,
+    playtimeMeasurement=playtimeMeasurement)
 
 ### MENU BAR ###
 # How to button
